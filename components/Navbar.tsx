@@ -25,7 +25,7 @@ const Navbar = async () => {
           session?.user ? (
             <UserProfile nameInitials={nameInitials} userImg={session?.user?.image} />
           ) : (
-            <Link href="/signin">
+            <Link href="/signinregister">
               <Button size="sm">Sign in</Button>
             </Link>
           )
