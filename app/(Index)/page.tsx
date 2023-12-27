@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-
 
 
 const page = async () => {
-
   return (
     <div className="px-[6rem]">
       <section className="min-h-[75vh] flex items-center justify-center flex-col">
