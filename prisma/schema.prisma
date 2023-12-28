@@ -43,6 +43,12 @@ model User {
   updatedAt       DateTime          @updatedAt
 }
 
+model Categories {
+  id      String    @id @default(cuid())
+  title   String    @unique
+  product Product[]
+}
+
 model Product {
   id                String           @id @default(cuid())
   name              String
@@ -56,8 +62,10 @@ model Product {
   Cart              Cart?            @relation(fields: [cartId], references: [id])
   cartId            String?
   PurchaseHistory   PurchaseHistory? @relation(fields: [purchaseHistoryId], references: [id])
-  purchaseHistoryId String?          
+  purchaseHistoryId String?
   Order             Order[]
+  Categories        Categories?      @relation(fields: [categoriesId], references: [id])
+  categoriesId      String?
 }
 
 model Store {
@@ -77,8 +85,8 @@ model Cart {
 
 model PaymentMethod {
   id      String @id @default(cuid())
-  type    String 
-  details String 
+  type    String
+  details String
   user    User   @relation(fields: [userId], references: [id])
   userId  String
 }
@@ -95,7 +103,7 @@ model Address {
 
 model PurchaseHistory {
   id       String    @id @default(cuid())
-  products Product[] 
+  products Product[]
   total    Float
   user     User      @relation(fields: [userId], references: [id])
   userId   String
