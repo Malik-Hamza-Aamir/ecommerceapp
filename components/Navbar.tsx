@@ -12,7 +12,7 @@ const Navbar = async () => {
   const nameInitials: string = session?.user?.name.slice(0, 2).toUpperCase() as string;
 
   return (
-    <div className="border-b min-h-16 px-[6rem] flex items-center justify-between">
+    <div className="border-b min-h-16 px-[20rem] flex items-center justify-between">
       <div className='flex items-center'>
         <div>Logo</div>
         <Categories />
