@@ -16,7 +16,7 @@ interface Props {
 
 const CategoriesCard = ({ details }: Props) => {
     return (
-        <Link href={details.to}>
+        <Link href={`${details.to}/${details.categoryName}`}>
             <Card className="flex flex-col max-w-[16rem] items-center justify-center hover:bg-muted/50 transition-all duration-200 ease-in-out">
                 <CardHeader>
                     <div className="grid h-11 w-11 place-items-center rounded-full border-2">

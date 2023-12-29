@@ -10,13 +10,15 @@ import {
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 interface Props {
     userImg: string;
     nameInitials: string;
+    userEmail: string;
 }
 
-const UserProfile = ({ userImg, nameInitials }: Props) => {
+const UserProfile = ({ userImg, nameInitials, userEmail }: Props) => {
 
     const handleLogout = () => {
         signOut();
@@ -31,15 +33,32 @@ const UserProfile = ({ userImg, nameInitials }: Props) => {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                        <h2>My Account</h2>
+                        <p>{userEmail}</p>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Settings
-                        </DropdownMenuItem>
+                        <Link href="/dashboard/profile">
+                            <DropdownMenuItem>
+                                Profile
+                            </DropdownMenuItem>
+                        </Link>
+                        <Link href="/dashboard/billing">
+                            <DropdownMenuItem>
+                                Billing
+                            </DropdownMenuItem>
+                        </Link>
+                        <Link href="/dashboard/stores">
+                            <DropdownMenuItem>
+                                Stores
+                            </DropdownMenuItem>
+                        </Link>
+                        <Link href="/dashboard/purchases">
+                            <DropdownMenuItem>
+                                Purchase History
+                            </DropdownMenuItem>
+                        </Link>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>

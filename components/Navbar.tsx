@@ -10,11 +10,14 @@ import UserProfile from './UserProfile';
 const Navbar = async () => {
   const session = await getServerSession(options);
   const nameInitials: string = session?.user?.name.slice(0, 2).toUpperCase() as string;
+  const userEmail: string = session?.user?.email as string;
 
   return (
     <div className="border-b min-h-16 px-[20rem] flex items-center justify-between">
       <div className='flex items-center'>
-        <div>Logo</div>
+        <Link href="/">
+          <div>Logo</div>
+        </Link>
         <Categories />
       </div>
 
@@ -23,7 +26,7 @@ const Navbar = async () => {
         <Button size="icon" variant="outline" className="mx-2 px-2"><ShoppingCart size={18} /></Button>
         {
           session?.user ? (
-            <UserProfile nameInitials={nameInitials} userImg={session?.user?.image} />
+            <UserProfile nameInitials={nameInitials} userImg={session?.user?.image} userEmail={userEmail} />
           ) : (
             <Link href="/signinregister">
               <Button size="sm">Sign in</Button>

@@ -6,29 +6,29 @@ import CategoriesCard from "@/components/CategoriesCard";
 const cardDetails = [
   {
     id: 1,
-    to: "/",
-    categoryName: "Clothes",
+    to: "/categories",
+    categoryName: "clothes",
     symbol: <Shirt />,
     productCount: 346
   },
   {
     id: 1,
-    to: "/",
-    categoryName: "Footwear",
+    to: "/categories",
+    categoryName: "footwear",
     symbol: <Footprints />,
     productCount: 110
   },
   {
     id: 1,
-    to: "/",
-    categoryName: "Caps",
+    to: "/categories",
+    categoryName: "caps",
     symbol: <Shirt />,
     productCount: 84
   },
   {
     id: 1,
-    to: "/",
-    categoryName: "Office Attire",
+    to: "/categories",
+    categoryName: "office",
     symbol: <Shirt />,
     productCount: 98
   },

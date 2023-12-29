@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/db";
-import { getServerSession } from "next-auth";
-import { options } from "../auth/[...nextauth]/options";
 
 export async function GET(request: Request) {
     try {
@@ -22,17 +20,36 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {    
     try{
-        const { name, price, description } = await request.json();
+        const { name, price, description, quantity } = await request.json();
         
         if (!name || !price || !description) {
             return NextResponse.json({ message: "Please Enter Required Data" }, { status: 400 });
         }
 
+// model Product {
+//   id                String           @id @default(cuid())
+//   name              String
+//   price             Int
+//   description       String
+//   quantity          Int
+//   store             Store            @relation(fields: [storeId], references: [id])
+//   storeId           String
+//   Cart              Cart?            @relation(fields: [cartId], references: [id])
+//   cartId            String?
+//   PurchaseHistory   PurchaseHistory? @relation(fields: [purchaseHistoryId], references: [id])
+//   purchaseHistoryId String?
+//   Order             Order[]
+//   Categories        Categories?      @relation(fields: [categoriesId], references: [id])
+//   categoriesId      String?
+// }
+
         await db.product.create({
             data: {
                 name,
                 price,
-                description
+                description,
+                quantity,
+                
             }
         })
 
