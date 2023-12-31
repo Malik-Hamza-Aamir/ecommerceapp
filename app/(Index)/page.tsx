@@ -12,21 +12,21 @@ const cardDetails = [
     productCount: 346
   },
   {
-    id: 1,
+    id: 2,
     to: "/categories",
     categoryName: "footwear",
     symbol: <Footprints />,
     productCount: 110
   },
   {
-    id: 1,
+    id: 3,
     to: "/categories",
     categoryName: "caps",
     symbol: <Shirt />,
     productCount: 84
   },
   {
-    id: 1,
+    id: 4,
     to: "/categories",
     categoryName: "office",
     symbol: <Shirt />,
@@ -36,10 +36,10 @@ const cardDetails = [
 
 const page = async () => {
   return (
-    <div className="px-[20rem]">
-      <section className="min-h-[60vh] flex items-center justify-center flex-col">
-        <h1 className="font-bold px-[5rem] text-[3.4rem] text-center leading-[3rem]">Unleash Style Dive into the Future of E-commerce with Our Cutting-Edge Collection!</h1>
-        <h3 className="font-normal px-[400px] text-[1.2rem] text-center leading-6 text-gray-500 my-4">Buy and sell clothing from independent brands and stores around the world with ease</h3>
+    <div className="max-w-6xl mx-auto">
+      <section className="flex flex-col items-center justify-center gap-4 py-12 min-h-[70vh]">
+        <h1 className=" font-extrabold text-[3.4rem] text-center leading-[3rem]">Unleash Style Dive into the Future of Ecommerce with Our Collection!</h1>
+        <h3 className="font-normal text-[1.2rem] text-center leading-6 text-gray-500 my-2  border-2 border-red-500">Buy and sell clothing from independent brands and stores around the world with ease</h3>
         <div className="flex gap-6">
           <Link href="/">
             <Button>Buy Now</Button>
