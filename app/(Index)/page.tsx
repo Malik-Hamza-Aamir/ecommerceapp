@@ -39,7 +39,7 @@ const page = async () => {
     <div className="max-w-6xl mx-auto">
       <section className="flex flex-col items-center justify-center gap-4 py-12 min-h-[70vh]">
         <h1 className=" font-extrabold text-[3.4rem] text-center leading-[3rem]">Unleash Style Dive into the Future of Ecommerce with Our Collection!</h1>
-        <h3 className="font-normal text-[1.2rem] text-center leading-6 text-gray-500 my-2  border-2 border-red-500">Buy and sell clothing from independent brands and stores around the world with ease</h3>
+        <h3 className="font-normal text-[1.2rem] text-center leading-6 text-gray-500 my-2">Buy and sell skateboarding gears from independent brands and stores around the world with ease</h3>
         <div className="flex gap-6">
           <Link href="/">
             <Button>Buy Now</Button>
