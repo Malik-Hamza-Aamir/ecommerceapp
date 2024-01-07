@@ -3,22 +3,6 @@ import { db } from "@/app/db";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 
-export async function GET() {
-  const session = await getServerSession(options);
-  const uId = session?.user?.id;
-  console.log("user session  :", session);
-  console.log("user id :", uId);
-
-  if (!session) {
-    return NextResponse.json(
-      { message: "user need to login" },
-      { status: 400 }
-    );
-  }
-
-  return NextResponse.json({ message: "Get Hello" });
-}
-
 export const POST = async (request: Request) => {
   const session = await getServerSession(options);
   const uId = session?.user?.id as string;
