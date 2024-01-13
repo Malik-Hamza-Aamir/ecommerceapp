@@ -5,9 +5,13 @@ export async function GET(request: Request) {
     try {
         const products = await db.product.findMany({
             select: {
+                id: true,
                 name: true,
+                description: true,
                 price: true,
-                description: true
+                quantity: true,
+                sizes: true,
+                colors: true,
             }
         })
 
@@ -20,36 +24,32 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {    
     try{
-        const { name, price, description, quantity } = await request.json();
+        const { name, description, price, quantity, storeId, categoryId, sizes = undefined, colors = undefined } = await request.json();
         
-        if (!name || !price || !description) {
+        if (!name || !price || !description || !quantity || !storeId || !categoryId) {
             return NextResponse.json({ message: "Please Enter Required Data" }, { status: 400 });
         }
 
-// model Product {
-//   id                String           @id @default(cuid())
-//   name              String
-//   price             Int
-//   description       String
-//   quantity          Int
-//   store             Store            @relation(fields: [storeId], references: [id])
-//   storeId           String
-//   Cart              Cart?            @relation(fields: [cartId], references: [id])
-//   cartId            String?
-//   PurchaseHistory   PurchaseHistory? @relation(fields: [purchaseHistoryId], references: [id])
-//   purchaseHistoryId String?
-//   Order             Order[]
-//   Categories        Categories?      @relation(fields: [categoriesId], references: [id])
-//   categoriesId      String?
-// }
+        const productExists = await db.product.findUnique({
+            where: {
+                name
+            }
+        })
+
+        if (productExists) {
+            return NextResponse.json({ message: "Product Already Exists" }, { status: 400 });
+        }
 
         await db.product.create({
             data: {
                 name,
-                price,
                 description,
+                price,
                 quantity,
-                
+                storeId,
+                categoryId,
+                sizes,
+                colors
             }
         })
 

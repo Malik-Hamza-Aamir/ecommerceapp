@@ -40,6 +40,16 @@ export async function POST(request: Request) {
       );
     }
 
+    const categoryExists = await db.category.findUnique({
+      where: {
+        title
+      }
+    })
+
+    if (categoryExists) {
+      return NextResponse.json({ message: "Category Already Exists" }, { status: 400 })
+    }
+
     await db.category.create({
       data: {
         title,
