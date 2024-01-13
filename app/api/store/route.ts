@@ -52,13 +52,60 @@ export const POST = async (request: Request) => {
     });
 
     return NextResponse.json(
-      { message: "Category Created Successfully" },
+      { message: "Store Created Successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.log("Error in post store api :", error);
     return NextResponse.json(
       { message: "Can't Create Store" },
+      { status: 500 }
+    );
+  }
+};
+
+export const PUT = async (request: Request) => {
+  try {
+    const { id, name, description } = await request.json();
+
+    if (!name || !description || !id) {
+      return NextResponse.json(
+        { message: "Please Enter Required Data" },
+        { status: 400 }
+      );
+    }
+
+    const storeExists = await db.store.findUnique({
+      where: {
+        name,
+      },
+    });
+
+    if (storeExists) {
+      return NextResponse.json(
+        { message: "Store Already Exists by this Name" },
+        { status: 400 }
+      );
+    }
+
+    await db.store.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        description,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Store Updated Successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("Error in Put store api :", error);
+    return NextResponse.json(
+      { message: "Can't Update Store" },
       { status: 500 }
     );
   }
