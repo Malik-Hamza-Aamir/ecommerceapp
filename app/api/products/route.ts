@@ -60,3 +60,24 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Unable to Create Product. Please Try Again!" });
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const { id } = await request.json();
+
+        if (!id) {
+            return NextResponse.json({ message: "Please Enter Required Data" }, { status: 400 });
+        }
+
+        await db.product.delete({
+            where: {
+                id
+            }
+        })
+
+        return NextResponse.json({ message: "Product Deleted Successfully" }, { status: 200 });
+    } catch (error) {
+        console.log("error in deleting a Product :", error);
+        return NextResponse.json({ message: "Unable to Delete Product. Please Try Again!" });
+    }
+}

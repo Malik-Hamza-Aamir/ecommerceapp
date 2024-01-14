@@ -1,10 +1,8 @@
-import NoProducts from "@/components/NoProducts";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import StoreProducts from "@/components/StoreProducts";
 
 const page = async ({ params: { id } }: { params: { id: string } }) => {
-  console.log("id :", id);
   const result = await fetch(`http://localhost:3000/api/getstoreproducts?id=${id}`,
     {
       method: "GET",
@@ -25,7 +23,7 @@ const page = async ({ params: { id } }: { params: { id: string } }) => {
           <h1 className="text-3xl">
             <strong>Products</strong>
           </h1>
-          <Link href="/dashboard/stores/new">
+          <Link href={`/dashboard/stores/${id}/products/new`}>
             <Button size="sm">Add Products</Button>
           </Link>
         </div>

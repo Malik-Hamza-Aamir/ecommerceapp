@@ -1,25 +1,10 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/db";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const categoryName = searchParams.get("categoryName");
-
-    if (!categoryName) {
-      return NextResponse.json(
-        { message: "Plesae Enter Required Data" },
-        { status: 400 }
-      );
-    }
-
-    const products = await db.category.findUnique({
-      where: {
-        title: categoryName,
-      },
-    });
-
-    return NextResponse.json({ category: products }, { status: 200 });
+    const category = await db.category.findMany();
+    return NextResponse.json({ category: category }, { status: 200 });
   } catch (error) {
     console.log("Error in categories api :", error);
     return NextResponse.json(
@@ -42,12 +27,15 @@ export async function POST(request: Request) {
 
     const categoryExists = await db.category.findUnique({
       where: {
-        title
-      }
-    })
+        title,
+      },
+    });
 
     if (categoryExists) {
-      return NextResponse.json({ message: "Category Already Exists" }, { status: 400 })
+      return NextResponse.json(
+        { message: "Category Already Exists" },
+        { status: 400 }
+      );
     }
 
     await db.category.create({

@@ -2,14 +2,12 @@
 import * as React from "react"
 import {
   CaretSortIcon,
-  ChevronDownIcon,
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons"
 import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -19,14 +17,11 @@ import {
 } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -38,7 +33,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import { useRouter } from 'next/navigation'
 
 export type Product = {
   id: string;
@@ -53,21 +48,6 @@ export type Product = {
 }
 
 export const columns: ColumnDef<Product>[] = [
-  {
-    id: "select",
-    header: ({ table }) => <Checkbox
-      checked={
-        table.getIsAllPageRowsSelected() ||
-        (table.getIsSomePageRowsSelected() && "indeterminate")
-      }
-      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-      aria-label="Select all"
-    />
-    ,
-    cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />,
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "name",
     header: ({ column }) => <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Name<CaretSortIcon className="ml-2 h-4 w-4" /></Button>,
@@ -95,7 +75,29 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const router = useRouter();
+
+      const handleEdit = () => {
+        console.log("edit button clicked");
+        console.log("row id :", row.original);
+      }
+
+      const handleDelete = async () => {
+        const result = await fetch(`http://localhost:3000/api/products`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: row.original.id
+            }),
+            cache: 'no-store'
+          },
+        );
+
+        router.refresh();
+      }
 
       return (
         <DropdownMenu>
@@ -107,14 +109,8 @@ export const columns: ColumnDef<Product>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEdit}>Edit Product</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>Delete Product</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -126,17 +122,19 @@ const StoreProducts = ({ prodInfo }: { prodInfo: Product[] }) => {
   const data: any = prodInfo.map((data) => ({
     id: data.id,
     name: data.name,
-    quantity: data.quantity,
+    description: data.description,
     price: data.price,
+    quantity: data.quantity,
+    sizes: data.sizes,
+    colors: data.colors,
+    storeId: data.storeId,
+    categoryId: data.categoryId,
   }));
-  
+
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
     data,
@@ -147,13 +145,9 @@ const StoreProducts = ({ prodInfo }: { prodInfo: Product[] }) => {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
-      rowSelection,
     },
   })
 

@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 const StoreDetails = ({ params: {id} }: { params: { id: string } }) => {
   const initialData = {
     name: "",
-    description: ""
+    description: "",
   }
 
   const [isloading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ const StoreDetails = ({ params: {id} }: { params: { id: string } }) => {
 
     try {
       const result = await fetch(
-        "http://localhost:3000/api/store",
+        "http://localhost:3000/api/products",
         {
           method: "PUT",
           headers: {
