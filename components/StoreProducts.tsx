@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 export type Product = {
   id: string;
@@ -76,10 +77,10 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const router = useRouter();
+      const pathname = usePathname();
 
       const handleEdit = () => {
-        console.log("edit button clicked");
-        console.log("row id :", row.original);
+        router.push(`${pathname}/edit/${row.original.id}`);
       }
 
       const handleDelete = async () => {

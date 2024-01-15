@@ -81,3 +81,36 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ message: "Unable to Delete Product. Please Try Again!" });
     }
 }
+
+export async function PUT(request: Request) {
+    try{
+        const { id, name, description, price, quantity, storeId, categoryId, sizes = undefined, colors = undefined } = await request.json();
+        
+        if (!id || !name || !price || !description || !quantity || !storeId || !categoryId) {
+            return NextResponse.json({ message: "Please Enter Required Data" }, { status: 400 });
+        }
+
+        await db.product.update({
+            where: {
+                id
+            },
+            data: {
+                id,
+                name,
+                description,
+                price,
+                quantity,
+                storeId,
+                categoryId,
+                sizes,
+                colors
+            }
+        })
+
+        return NextResponse.json({ message: "Product Updated Successfully" }, { status: 200 });
+    }
+    catch (error) {
+        console.log("error in updating Products :", error);
+        return NextResponse.json({ message: "Unable to update Product. Please Try Again!" });
+    }
+}
