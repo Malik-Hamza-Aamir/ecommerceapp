@@ -27,17 +27,21 @@ export const options: NextAuthOptions = {
           ...profile,
           id: profile.sub,
           image: profile.picture,
-          name: profile.name
-        }
+          name: profile.name,
+        };
       },
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "hello@example.com" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "hello@example.com",
+        },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // handle Auth
@@ -47,28 +51,31 @@ export const options: NextAuthOptions = {
 
         const user = await db.user.findUnique({
           where: {
-            email: credentials.email
-          }
-        })
+            email: credentials.email,
+          },
+        });
 
         if (!user) {
           return null;
         }
 
-        const isPasswordValid = await compare(credentials.password, user.password);
+        const isPasswordValid = await compare(
+          credentials.password,
+          user.password
+        );
 
         if (!isPasswordValid) {
-          return null
+          return null;
         }
 
         return {
           id: user.id,
           email: user.email,
           name: user.username,
-          image: ''
-        }
-      }
-    })
+          image: "",
+        };
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -80,24 +87,23 @@ export const options: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      // check if the user already exists
       const dbUser = await db.user.findUnique({
         where: {
-          email: token.email
+          email: token.email,
         },
       });
 
       if (dbUser) {
         await db.user.update({
           where: {
-            email: token.email
+            email: token.email,
           },
           data: {
             id: token.id,
             username: token.name,
             email: token.email,
-          }
-        })
+          },
+        });
       } else {
         const hashedPassword = await hash("dummypassword", 10);
         await db.user.create({
@@ -105,11 +111,10 @@ export const options: NextAuthOptions = {
             id: token.id,
             email: token.email,
             username: token.name,
-            password: hashedPassword
+            password: hashedPassword,
           },
         });
       }
-
 
       if (session?.user) {
         session.user.id = token.id;
@@ -119,6 +124,6 @@ export const options: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/signinregister"
-  }
+    signIn: "/signinregister",
+  },
 };

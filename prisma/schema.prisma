@@ -7,16 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum SellerStatus {
+  CUSTOMER
+  SELLER
+}
+
 enum UploadStatus {
   PENDING
   PROCESSING
   FAILED
   SUCCESS
-}
-
-enum SellerStatus {
-  CUSTOMER
-  SELLER
 }
 
 model User {
@@ -26,6 +26,7 @@ model User {
   password     String
   phone        String?
   image        UserImage?   @relation(fields: [userImageId], references: [id])
+  address      Address[]
   sellerStatus SellerStatus @default(CUSTOMER)
   stores       Store[]
   createdAt    DateTime     @default(now())
@@ -33,9 +34,21 @@ model User {
   userImageId  String?
 }
 
+model Address {
+  id            String   @id @default(cuid())
+  street        String
+  city          String
+  stateProvince String
+  country       String
+  zip           String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+}
+
 model UserImage {
   id           String       @id @default(cuid())
-  name         String
   uploadStatus UploadStatus @default(PENDING)
   url          String
   key          String
