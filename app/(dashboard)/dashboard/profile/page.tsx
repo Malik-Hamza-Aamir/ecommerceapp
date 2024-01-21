@@ -4,6 +4,7 @@ import { options } from "@/app/api/auth/[...nextauth]/options"
 import Link from "next/link"
 import Image from "next/image"
 import { CircleUserRound, MoveRight } from 'lucide-react';
+import TooltipWrapper from "@/components/TooltipWrapper"
 
 const ProfilePage = async () => {
   const session = await getServerSession(options);
@@ -32,59 +33,65 @@ const ProfilePage = async () => {
       </div>
 
 
-      <div className="p-12 bg-zinc-100 rounded-lg">
-        <div>
-          <h4>Image</h4>
+      <div className="py-6 pr-[5rem] pl-[2rem] mr-[10rem] bg-zinc-100/50 rounded-lg">
+        <div className="mb-[1.5rem]">
+          <h4 className="font-semibold">Profile</h4>
           <Separator className="my-2" />
-          <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
-            <div className="flex gap-4 items-center">
-              {
-                userImage !== "" ? (
-                  <Image
-                    src={userImage}
-                    alt="profile image"
-                    width={50}
-                    height={50}
-                    className="rounded-[50%] border"
-                  />
-                )
-                  :
-                  (
-                    <CircleUserRound />
+          <TooltipWrapper content="Change Profile Pic">
+            <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-2">
+              <div className="flex gap-4 items-center">
+                {
+                  userImage !== "" ? (
+                    <Image
+                      src={userImage}
+                      alt="profile image"
+                      width={50}
+                      height={50}
+                      className="rounded-[50%] border"
+                    />
                   )
-              }
+                    :
+                    (
+                      <CircleUserRound />
+                    )
+                }
 
-              {userData.username}
-            </div>
+                {userData.username}
+              </div>
 
-            <MoveRight className="size-4" />
-          </Link>
+              <MoveRight className="size-4" />
+            </Link>
+          </TooltipWrapper>
+        </div>
+
+        <div className="mb-[1.5rem]">
+          <h4 className="font-semibold">Email Address</h4>
+          <Separator className="my-2" />
+          <h4 className="px-3 py-1">{userData.email}</h4>
+        </div>
+
+        <div className="mb-[1.5rem]">
+          <h4 className="font-semibold">Phone Number</h4>
+          <Separator className="my-2" />
+          <TooltipWrapper content={userData.phone ? "Change Phone Number" : "Add Phone Number"}>
+            <Link href="/dashboard/profile/newphone" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
+              {userData.phone ? userData.phone : "No Number Added"}
+              <MoveRight className="size-4" />
+            </Link>
+          </TooltipWrapper>
         </div>
 
         <div>
-          <h4>Email</h4>
+          <h4 className="font-semibold">Shipping Address</h4>
           <Separator className="my-2" />
-          {userData.email}
-        </div>
-
-        <div>
-          <h4>Phone</h4>
-          <Separator className="my-2" />
-          <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
-            {userData.phone ? userData.phone : "Add Phone Number"}
-            <MoveRight className="size-4" />
-          </Link>
-        </div>
-
-        <div>
-          <h4>Address</h4>
-          <Separator className="my-2" />
-          <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
-            {userData.address.length > 0 ? userData.address.map((address: string) => (
-              <div>{address}</div>
-            )) : "Add Address"}
-            <MoveRight className="size-4" />
-          </Link>
+          <TooltipWrapper content={userData.address.length > 0 ? "Modify Address" : "Add Address"}>
+            <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
+              {userData.address.length > 0 ? userData.address.map((address: string) => (
+                <div>{address}</div>
+              )) : "No Address Added"}
+              <MoveRight className="size-4" />
+            </Link>
+          </TooltipWrapper>
         </div>
       </div>
 

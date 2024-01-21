@@ -33,5 +33,41 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-    
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Please Enter Required Data" },
+        { status: 400 }
+      );
+    }
+
+    const body: any = await request.json();
+
+    if (!body) {
+      return NextResponse.json(
+        { message: "Please Enter Required Data" },
+        { status: 400 }
+      );
+    }
+
+    const updatedFields: any = {};
+    for (const key in body) {
+      updatedFields[key] = body[key];
+    }
+
+    await db.user.update({
+      where: {
+        id,
+      },
+      data: updatedFields,
+    });
+
+    return NextResponse.json({ message: "Updated Successfully" }, { status: 200 })
+  } catch (error) {
+    console.log("error in user patch api :", error);
+    return NextResponse.json({ message: "Can't update user Data" });
+  }
 }
