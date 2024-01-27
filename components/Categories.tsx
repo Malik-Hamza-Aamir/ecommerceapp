@@ -107,9 +107,9 @@ export function Categories() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/docs" legacyBehavior passHref>
+          <Link href="/products" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Documentation
+              Products
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
