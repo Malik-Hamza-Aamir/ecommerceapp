@@ -1,4 +1,3 @@
-import { ShoppingCart } from 'lucide-react';
 import { Categories } from "./Categories";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -6,6 +5,7 @@ import Link from "next/link";
 import { getServerSession } from 'next-auth';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import UserProfile from './UserProfile';
+import Cart from './Cart';
 
 const Navbar = async () => {
   const session = await getServerSession(options);
@@ -23,7 +23,7 @@ const Navbar = async () => {
 
       <div className='flex items-center'>
         <Input placeholder='Search Products' />
-        <Button size="icon" variant="outline" className="mx-2 px-2"><ShoppingCart size={18} /></Button>
+        <Cart />
         {
           session?.user ? (
             <UserProfile nameInitials={nameInitials} userImg={session?.user?.image} userEmail={userEmail} />

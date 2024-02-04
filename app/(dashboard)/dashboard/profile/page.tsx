@@ -5,6 +5,11 @@ import Link from "next/link"
 import Image from "next/image"
 import { CircleUserRound, MoveRight } from 'lucide-react';
 import TooltipWrapper from "@/components/TooltipWrapper"
+import {
+  Dialog,
+  DialogTrigger
+} from "@/components/ui/dialog"
+import DndZone from "@/components/DndZone"
 
 const ProfilePage = async () => {
   const session = await getServerSession(options);
@@ -38,29 +43,33 @@ const ProfilePage = async () => {
           <h4 className="font-semibold">Profile</h4>
           <Separator className="my-2" />
           <TooltipWrapper content="Change Profile Pic">
-            <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-2">
-              <div className="flex gap-4 items-center">
-                {
-                  userImage !== "" ? (
-                    <Image
-                      src={userImage}
-                      alt="profile image"
-                      width={50}
-                      height={50}
-                      className="rounded-[50%] border"
-                    />
-                  )
-                    :
-                    (
-                      <CircleUserRound />
-                    )
-                }
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="cursor-pointer flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-2">
+                  <div className="flex gap-4 items-center">
+                    {
+                      userImage !== "" ? (
+                        <Image
+                          src={userImage}
+                          alt="profile image"
+                          width={50}
+                          height={50}
+                          className="rounded-[50%] border"
+                        />
+                      )
+                        :
+                        (
+                          <CircleUserRound />
+                        )
+                    }
 
-                {userData.username}
-              </div>
-
-              <MoveRight className="size-4" />
-            </Link>
+                    {userData.username}
+                  </div>
+                  <MoveRight className="size-4" />
+                </div>
+              </DialogTrigger>
+              <DndZone />
+            </Dialog>
           </TooltipWrapper>
         </div>
 
