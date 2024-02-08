@@ -68,11 +68,22 @@ export const options: NextAuthOptions = {
           return null;
         }
 
+        let img: string = "";
+        if (user.userImageId) {
+          const profilePic = await db.userImage.findUnique({
+            where: {
+              id: user.userImageId,
+            },
+          });
+
+          img = profilePic?.url as string;
+        }
+
         return {
           id: user.id,
           email: user.email,
           name: user.username,
-          image: "",
+          image: img !== "" ? img : "",
         };
       },
     }),
@@ -116,9 +127,20 @@ export const options: NextAuthOptions = {
         });
       }
 
+      let image: string = "";
+      if (dbUser?.userImageId !== "" || dbUser?.userImageId !== null) {
+        const userImage = await db.userImage.findUnique({
+          where: {
+            id: dbUser?.userImageId as string,
+          },
+        });
+
+        image = userImage?.url as string;
+      }
+
       if (session?.user) {
         session.user.id = token.id;
-        session.user.image = token.image;
+        session.user.image = image !== "" ? image : token.image;
       }
       return session;
     },

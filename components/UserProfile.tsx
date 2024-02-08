@@ -11,6 +11,7 @@ import {
 } from "./ui/dropdown-menu";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Props {
     userImg: string;
@@ -19,9 +20,9 @@ interface Props {
 }
 
 const UserProfile = ({ userImg, nameInitials, userEmail }: Props) => {
-
+    const router = useRouter();
     const handleLogout = () => {
-        signOut();
+        signOut({ callbackUrl: "/" });
     }
 
     return (

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import ClientSessionProvider from '@/provider/ClientSessionProvider'
 import { Toaster } from '@/components/ui/toaster'
+import RtkQueryProvider from '@/provider/RtkQueryProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,8 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ClientSessionProvider>
-          {children}
-          <Toaster />
+          <RtkQueryProvider>
+            {children}
+            <Toaster />
+          </RtkQueryProvider>
         </ClientSessionProvider>
       </body>
     </html>

@@ -10,8 +10,10 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog"
 import DndZone from "@/components/DndZone"
+import { unstable_noStore } from "next/cache"
 
 const ProfilePage = async () => {
+  unstable_noStore()
   const session = await getServerSession(options);
   const userImage = session?.user?.image as string;
   const userId = session?.user?.id as string;
@@ -28,7 +30,7 @@ const ProfilePage = async () => {
   const userData = jsonResponse.user;
 
   return (
-    <div className="pt-[32px] pr-[10%] flex-1 flex flex-col max-h-[90vh] overflow-y-auto">
+    <div className="pt-[32px] pr-[10%] flex-1 flex flex-col">
       <div>
         <h1 className="text-3xl">
           <strong>Account</strong>
@@ -54,7 +56,7 @@ const ProfilePage = async () => {
                           alt="profile image"
                           width={50}
                           height={50}
-                          className="rounded-[50%] border"
+                          className="rounded-[50%] border h-[50px]"
                         />
                       )
                         :
