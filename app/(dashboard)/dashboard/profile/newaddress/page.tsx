@@ -10,7 +10,7 @@ const page = async () => {
 
 
     return (
-        <div className="pt-[32px] mr-[20rem] w-full">
+        <div className="pt-[32px] mr-[20rem] flex-1">
             <h2 className="text-3xl">
                 <strong>Add Address</strong>
             </h2>
@@ -50,7 +50,7 @@ const page = async () => {
                         </div>
                     </div>
 
-                    <ButtonLoader>Add Address</ButtonLoader>
+                    <ButtonLoader text="Add Address" />
                 </form>
             </div>
         </div>
