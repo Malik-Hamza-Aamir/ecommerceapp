@@ -13,7 +13,7 @@ const Navbar = async () => {
   const userEmail: string = session?.user?.email as string;
 
   return (
-    <div className="border-b min-h-16 px-[10%] flex items-center justify-between sticky top-0 z-50">
+    <div className="border-b bg-white min-h-16 px-[10%] flex items-center justify-between sticky top-0 z-50">
       <div className='flex items-center'>
         <Link href="/">
           <div>Logo</div>

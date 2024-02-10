@@ -1,33 +1,84 @@
 import { Separator } from "@/components/ui/separator"
 import { getServerSession } from "next-auth"
 import { options } from "@/app/api/auth/[...nextauth]/options"
-import Link from "next/link"
 import Image from "next/image"
-import { CircleUserRound, MoveRight } from 'lucide-react';
-import TooltipWrapper from "@/components/TooltipWrapper"
+import { CircleUserRound } from 'lucide-react';
 import {
   Dialog,
   DialogTrigger
 } from "@/components/ui/dialog"
 import DndZone from "@/components/DndZone"
 import { unstable_noStore } from "next/cache"
+import { getUser } from "@/app/_dataAccess"
+import { Badge } from "@/components/ui/badge"
+import AddProfileBtn from "@/components/AddProfileBtn"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { deleteAddressAction, deletePhoneNoAction } from "@/app/_actions/actions";
 
 const ProfilePage = async () => {
   unstable_noStore()
   const session = await getServerSession(options);
   const userImage = session?.user?.image as string;
   const userId = session?.user?.id as string;
+  const userData = await getUser(userId);
 
-  const response = await fetch(`http://localhost:3000/api/user?id=${userId}`, {
-    cache: "no-store",
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  let address;
+  if (userData?.address) {
+    if (userData.address.length > 0) {
+      address = userData.address.map(data => (
+        <Accordion type="single" collapsible className="w-full" key={data.id}>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>
+              <div key={data.id} className="flex gap-5 items-center hover:bg-gray-200 rounded-md px-3 py-1" >
+                <p>{`${data.street} ${data.country}`}</p>
+                {
+                  data.addressType === "PRIMARY" ? (
+                    <Badge className="bg-[#5777f2] hover:bg-[#5776f2e7]">PRIMARY</Badge>
+                  ) : null
+                }
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <h4 className="font-semibold">Remove</h4>
+              <p className="text-[13px] text-zinc-500">Delete this address and remove it from your account</p>
+              <form action={deleteAddressAction.bind(null, data.id)}>
+                <button className="hover:underline text-red-600 font-semibold text-[13px]">Remove address</button>
+              </form>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      ))
+    } else {
+      address = "No Address Added Yet"
+    }
+  }
 
-  const jsonResponse = await response.json();
-  const userData = jsonResponse.user;
+
+  let phone;
+  if (userData?.phone) {
+    phone = <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>
+          <h4 className="px-3 py-1">{userData.phone}</h4>
+        </AccordionTrigger>
+        <AccordionContent>
+          <h4 className="font-semibold">Remove</h4>
+          <p className="text-[13px] text-zinc-500">Delete this phone number and remove it from your account</p>
+          <form action={deletePhoneNoAction.bind(null, userId)}>
+            <button className="hover:underline text-red-600 font-semibold text-[13px]">Remove phone number</button>
+          </form>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  } else {
+    phone = <h4 className="px-6 py-1">No phone number added yet</h4>
+  }
+
 
   return (
     <div className="pt-[32px] pr-[10%] flex-1 flex flex-col">
@@ -44,66 +95,68 @@ const ProfilePage = async () => {
         <div className="mb-[1.5rem]">
           <h4 className="font-semibold">Profile</h4>
           <Separator className="my-2" />
-          <TooltipWrapper content="Change Profile Pic">
-            <Dialog>
-              <DialogTrigger asChild>
-                <div className="cursor-pointer flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-2">
-                  <div className="flex gap-4 items-center">
-                    {
-                      userImage !== "" ? (
-                        <Image
-                          src={userImage}
-                          alt="profile image"
-                          width={50}
-                          height={50}
-                          className="rounded-[50%] border h-[50px]"
-                        />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <div className="flex gap-4 items-center">
+                  {
+                    userImage !== "" ? (
+                      <Image
+                        src={userImage}
+                        alt="profile image"
+                        width={50}
+                        height={50}
+                        className="rounded-[50%] border h-[50px]"
+                      />
+                    )
+                      :
+                      (
+                        <CircleUserRound />
                       )
-                        :
-                        (
-                          <CircleUserRound />
-                        )
-                    }
+                  }
 
-                    {userData.username}
-                  </div>
-                  <MoveRight className="size-4" />
+                  <h4>{userData?.username}</h4>
                 </div>
-              </DialogTrigger>
-              <DndZone />
-            </Dialog>
-          </TooltipWrapper>
+              </AccordionTrigger>
+
+              <AccordionContent>
+                <div>
+                  <h4 className="font-semibold">Change</h4>
+                  <p className="text-[13px] text-zinc-500">Change this image</p>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="hover:underline text-[#5777f2] font-semibold text-[13px]">Change profile pic</button>
+                    </DialogTrigger>
+                    <DndZone />
+                  </Dialog>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
 
         <div className="mb-[1.5rem]">
           <h4 className="font-semibold">Email Address</h4>
           <Separator className="my-2" />
-          <h4 className="px-3 py-1">{userData.email}</h4>
+          <h4 className="px-6 py-1">{userData?.email}</h4>
         </div>
 
         <div className="mb-[1.5rem]">
           <h4 className="font-semibold">Phone Number</h4>
           <Separator className="my-2" />
-          <TooltipWrapper content={userData.phone ? "Change Phone Number" : "Add Phone Number"}>
-            <Link href="/dashboard/profile/newphone" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
-              {userData.phone ? userData.phone : "No Number Added"}
-              <MoveRight className="size-4" />
-            </Link>
-          </TooltipWrapper>
+          {phone}
+          {
+            userData?.phone ? null : <AddProfileBtn hrefSrc="/dashboard/profile/newphone" text="Add Phone Number" />
+          }
         </div>
 
         <div>
           <h4 className="font-semibold">Shipping Address</h4>
           <Separator className="my-2" />
-          <TooltipWrapper content={userData.address.length > 0 ? "Modify Address" : "Add Address"}>
-            <Link href="/" className="flex justify-between items-center hover:bg-gray-200 rounded-md px-3 py-1">
-              {userData.address.length > 0 ? userData.address.map((address: string) => (
-                <div>{address}</div>
-              )) : "No Address Added"}
-              <MoveRight className="size-4" />
-            </Link>
-          </TooltipWrapper>
+          {address}
+          <AddProfileBtn hrefSrc="/dashboard/profile/newaddress" text="Add Address" />
         </div>
+
       </div>
 
     </div>

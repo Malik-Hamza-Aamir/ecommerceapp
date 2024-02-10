@@ -128,7 +128,7 @@ export const options: NextAuthOptions = {
       }
 
       let image: string = "";
-      if (dbUser?.userImageId !== "" || dbUser?.userImageId !== null) {
+      if (dbUser?.userImageId !== null) {
         const userImage = await db.userImage.findUnique({
           where: {
             id: dbUser?.userImageId as string,
@@ -136,6 +136,8 @@ export const options: NextAuthOptions = {
         });
 
         image = userImage?.url as string;
+      } else if (dbUser?.userImageId === null) {
+        image = "";
       }
 
       if (session?.user) {
