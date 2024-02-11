@@ -63,3 +63,23 @@ export async function deletePhoneNoAction(id: string) {
   console.log(user);
   revalidatePath("/dashboard/profile");
 }
+
+export async function addPhoneNumberAction(id: string, formData: FormData) {
+  try {
+    const phone = formData.get("phone") as string;
+
+    await db.user.update({
+      where: {
+        id,
+      },
+      data: {
+        phone,
+      },
+    });
+
+    revalidatePath("/dashboard/profile");
+    return { message: "Phone No Added Successfully" };
+  } catch (error) {
+    return { error: "Error while adding phone-no" };
+  }
+}
