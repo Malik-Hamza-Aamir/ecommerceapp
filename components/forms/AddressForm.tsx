@@ -1,7 +1,7 @@
 "use client";
 import ButtonLoader from "@/components/ButtonLoader";
 import { addAddressAction } from "@/app/_actions/actions";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
 interface Props {
     id: string;

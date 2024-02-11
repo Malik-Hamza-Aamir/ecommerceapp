@@ -83,3 +83,23 @@ export async function addPhoneNumberAction(id: string, formData: FormData) {
     return { error: "Error while adding phone-no" };
   }
 }
+
+export async function createStoreAction(id: string, formData: FormData) {
+  try {
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+
+    const store = await db.store.create({
+      data: {
+        name,
+        description,
+        userId: id,
+      },
+    });
+
+    revalidatePath("/dashboard/stores");
+    return { message: "Store Created Successfully" };
+  } catch (error) {
+    return { error: "Error while creating store" };
+  }
+}

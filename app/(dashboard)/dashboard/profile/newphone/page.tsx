@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import PhoneForm from "@/components/PhoneForm";
+import PhoneForm from "@/components/forms/PhoneForm";
 
 const page = async () => {
     const session = await getServerSession(options);

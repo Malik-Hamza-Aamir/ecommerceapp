@@ -1,6 +1,6 @@
 "use client";
-import ButtonLoader from "./ButtonLoader";
-import { useToast } from "./ui/use-toast";
+import ButtonLoader from "../ButtonLoader";
+import { useToast } from "../ui/use-toast";
 import { addPhoneNumberAction } from "@/app/_actions/actions";
 
 interface Props {
