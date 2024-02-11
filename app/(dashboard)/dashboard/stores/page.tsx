@@ -4,25 +4,12 @@ import { getServerSession } from "next-auth"
 import Link from "next/link"
 import StoreCard from "@/components/StoreCard"
 import NoStores from "@/components/NoStores"
+import { getStores } from "@/app/_dataAccess"
 
 const page = async () => {
   const session = await getServerSession(options)
   const userId = session?.user?.id as string;
-
-  const result = await fetch("http://localhost:3000/api/getstores",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId
-      }),
-      cache: 'no-store'
-    },
-  );
-  const data = await result.json();
-  const stores = data.stores;
+  const stores = await getStores(userId);
 
   return (
     <div className="pt-[32px] pr-[10%] flex-1 flex flex-col max-h-[90vh] overflow-y-auto">
@@ -39,7 +26,7 @@ const page = async () => {
       </div>
 
 
-      <div className="pt-4 flex justify-between flex-wrap">
+      <div className="pt-4 flex flex-wrap space-x-5">
         {
           stores.length > 0 ?
             stores.map((data: any) => (

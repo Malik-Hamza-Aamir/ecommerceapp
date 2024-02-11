@@ -38,3 +38,18 @@ export async function getUser(id: string) {
 
   return user;
 }
+
+export async function getStores(id: string) {
+  const stores = await db.store.findMany({
+    where: {
+      userId: id,
+    },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+    },
+  });
+
+  return stores;
+}

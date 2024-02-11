@@ -6,14 +6,14 @@ import {
 } from "@/components/ui/tooltip"
 import { ReactNode } from "react"
 
-const TooltipWrapper = ({children, content} : {children: ReactNode, content: string}) => {
+const TooltipWrapper = ({ children, content }: { children: ReactNode, content: string }) => {
   return (
-    <TooltipProvider delayDuration={100}>
-      <Tooltip>
+    <TooltipProvider delayDuration={100} >
+      <Tooltip >
         <TooltipTrigger asChild>
           {children}
         </TooltipTrigger>
-        <TooltipContent align="end" alignOffset={5}>
+        <TooltipContent side="bottom">
           <p>{content}</p>
         </TooltipContent>
       </Tooltip>
