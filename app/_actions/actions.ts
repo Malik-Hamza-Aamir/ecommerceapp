@@ -4,35 +4,40 @@ import { db } from "../db";
 import { addressSchema } from "@/lib/types";
 
 export async function addAddressAction(id: string, formData: FormData) {
-  const street = formData.get("street") as string;
-  const city = formData.get("city") as string;
-  const state = formData.get("state") as string;
-  const country = formData.get("country") as string;
-  const zip = formData.get("zip") as string;
+  try {
+    const street = formData.get("street") as string;
+    const city = formData.get("city") as string;
+    const state = formData.get("state") as string;
+    const country = formData.get("country") as string;
+    const zip = formData.get("zip") as string;
 
-  const data = { street, city, state, country, zip };
-  const result = addressSchema.parse(data);
+    const data = { street, city, state, country, zip };
+    const result = addressSchema.parse(data);
 
-  const addressExists = await db.address.count({
-    where: {
-      userId: id,
-    },
-  });
+    const addressExists = await db.address.count({
+      where: {
+        userId: id,
+      },
+    });
 
-  await db.address.create({
-    data: {
-      city: result.city,
-      street: result.street,
-      stateProvince: result.state,
-      country: result.country,
-      zip: result.zip,
-      addressType:
-        addressExists > 0 || addressExists === 1 ? "SECONDARY" : "PRIMARY",
-      userId: id,
-    },
-  });
+    await db.address.create({
+      data: {
+        city: result.city,
+        street: result.street,
+        stateProvince: result.state,
+        country: result.country,
+        zip: result.zip,
+        addressType:
+          addressExists > 0 || addressExists === 1 ? "SECONDARY" : "PRIMARY",
+        userId: id,
+      },
+    });
 
-  revalidatePath("/dashboard/profile");
+    revalidatePath("/dashboard/profile");
+    return { message: "Address Added Successfully" };
+  } catch (error) {
+    return { error: "Error while adding address" };
+  }
 }
 
 export async function deleteAddressAction(id: string) {
