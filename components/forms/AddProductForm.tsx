@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import ButtonLoader from "../ButtonLoader";
+import ButtonLoader from "../buttons/ButtonLoader";
 import { useToast } from "../ui/use-toast";
 import { addProductAction } from "@/app/_actions/actions";
 

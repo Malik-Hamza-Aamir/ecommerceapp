@@ -1,5 +1,5 @@
 "use client";
-import ButtonLoader from "../ButtonLoader";
+import ButtonLoader from "../buttons/ButtonLoader";
 import { useToast } from "../ui/use-toast";
 import { addPhoneNumberAction } from "@/app/_actions/actions";
 

@@ -1,4 +1,4 @@
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/cards/ProductCard";
 
 const page = async () => {
     const response = await fetch("http://localhost:3000/api/products", {

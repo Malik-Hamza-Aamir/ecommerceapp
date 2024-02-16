@@ -7,11 +7,11 @@ import {
   Dialog,
   DialogTrigger
 } from "@/components/ui/dialog"
-import DndZone from "@/components/DndZone"
+import DndZone from "@/components/commons/DndZone"
 import { unstable_noStore } from "next/cache"
 import { getUser } from "@/app/_dataAccess"
 import { Badge } from "@/components/ui/badge"
-import AddProfileBtn from "@/components/AddProfileBtn"
+import AddProfileBtn from "@/components/buttons/AddProfileBtn"
 import {
   Accordion,
   AccordionContent,

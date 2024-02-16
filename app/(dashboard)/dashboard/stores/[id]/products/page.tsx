@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import StoreProducts from "@/components/StoreProducts";
+import StoreProducts from "@/components/commons/StoreProducts";
 
 const page = async ({ params: { id } }: { params: { id: string } }) => {
   const result = await fetch(`http://localhost:3000/api/getstoreproducts?id=${id}`,

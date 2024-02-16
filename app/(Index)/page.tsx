@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Shirt, Footprints } from 'lucide-react';
-import CategoriesCard from "@/components/CategoriesCard";
+import CategoriesCard from "@/components/cards/CategoriesCard";
 
 const cardDetails = [
   {

@@ -1,11 +1,11 @@
-import { Categories } from "./Categories";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Categories } from "../commons/Categories";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import Link from "next/link";
 import { getServerSession } from 'next-auth';
 import { options } from '@/app/api/auth/[...nextauth]/options';
-import UserProfile from './UserProfile';
-import Cart from './Cart';
+import UserProfile from '../commons/UserProfile';
+import Cart from '../commons/Cart';
 
 const Navbar = async () => {
   const session = await getServerSession(options);

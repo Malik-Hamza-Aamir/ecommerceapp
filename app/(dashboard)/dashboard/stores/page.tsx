@@ -2,8 +2,8 @@ import { options } from "@/app/api/auth/[...nextauth]/options"
 import { Button } from "@/components/ui/button"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
-import StoreCard from "@/components/StoreCard"
-import NoStores from "@/components/NoStores"
+import StoreCard from "@/components/cards/StoreCard"
+import NoStores from "@/components/no_items/NoStores"
 import { getStores } from "@/app/_dataAccess"
 
 const page = async () => {

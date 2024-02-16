@@ -1,5 +1,5 @@
 "use client";
-import ButtonLoader from "@/components/ButtonLoader";
+import ButtonLoader from "@/components/buttons/ButtonLoader";
 import { addAddressAction } from "@/app/_actions/actions";
 import { useToast } from "../ui/use-toast";
 

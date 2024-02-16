@@ -1,5 +1,5 @@
 "use client"
-import ButtonLoader from "../ButtonLoader"
+import ButtonLoader from "../buttons/ButtonLoader"
 import { updateStoreInfoAction } from "@/app/_actions/actions"
 import { useToast } from "../ui/use-toast"
 

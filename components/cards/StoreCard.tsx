@@ -6,10 +6,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import Image from "next/image"
 import { Pencil, ShoppingBasket } from 'lucide-react';
-import TooltipWrapper from "./TooltipWrapper";
+import TooltipWrapper from "../commons/TooltipWrapper";
 
 const StoreCard = ({ storeInfo }: { storeInfo: any }) => {
     return (
