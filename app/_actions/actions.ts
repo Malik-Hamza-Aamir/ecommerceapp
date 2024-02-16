@@ -89,7 +89,7 @@ export async function createStoreAction(id: string, formData: FormData) {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
 
-    const store = await db.store.create({
+    await db.store.create({
       data: {
         name,
         description,
@@ -101,5 +101,86 @@ export async function createStoreAction(id: string, formData: FormData) {
     return { message: "Store Created Successfully" };
   } catch (error) {
     return { error: "Error while creating store" };
+  }
+}
+
+export async function updateStoreInfoAction(id: string, formData: FormData) {
+  try {
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+
+    await db.store.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        description,
+      },
+    });
+
+    revalidatePath("/dashboard/stores");
+    return { message: "Store Updated Successfully" };
+  } catch (error) {
+    return { error: "Error Updating Store" };
+  }
+}
+
+export async function addProductAction(id: string, formData: FormData) {
+  try {
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const price = formData.get("price") as string;
+    const quantity = formData.get("quantity") as string;
+    const category = formData.get("category") as string;
+
+    await db.product.create({
+      data: {
+        name,
+        description,
+        price: Number(price),
+        quantity: Number(quantity),
+        storeId: id,
+        categoryId: category,
+      },
+    });
+
+    revalidatePath(`/dashboard/stores/${id}/products`);
+    return { message: "Product Added Successfully" };
+  } catch (error) {
+    return { error: "Error Adding Products" };
+  }
+}
+
+export async function updateProductAction(
+  id: string,
+  formData: FormData,
+  prodId: string
+) {
+  try {
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const price = formData.get("price") as string;
+    const quantity = formData.get("quantity") as string;
+    const category = formData.get("category") as string;
+
+    await db.product.update({
+      where: {
+        id: prodId,
+      },
+      data: {
+        name,
+        description,
+        price: Number(price),
+        quantity: Number(quantity),
+        storeId: id,
+        categoryId: category,
+      },
+    });
+
+    revalidatePath(`/dashboard/stores/${id}/products/edit/${prodId}`);
+    return { message: "Product Updated Successfully" };
+  } catch (error) {
+    return { error: "Error Updating Products" };
   }
 }

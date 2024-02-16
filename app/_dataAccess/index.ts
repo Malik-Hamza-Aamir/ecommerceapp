@@ -53,3 +53,26 @@ export async function getStores(id: string) {
 
   return stores;
 }
+
+export async function getCategories() {
+  const categories = await db.category.findMany();
+  return categories;
+}
+
+export async function getProduct(id: string) {
+  const product = await db.product.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      name: true,
+      description: true,
+      price: true,
+      quantity: true,
+      storeId: true,
+      categoryId: true,
+    },
+  });
+
+  return product;
+}
