@@ -9,3 +9,13 @@ export const addressSchema = z.object({
 });
 
 export type AddressType = z.infer<typeof addressSchema>;
+
+export type Products = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantity: number;
+  sizes: string[];
+  colors: string[];
+};

@@ -1,8 +1,8 @@
+"use client";
 import {
     Sheet,
     SheetClose,
     SheetContent,
-    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
@@ -10,45 +10,40 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart } from 'lucide-react';
 import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { useContext } from "react";
+import { CartContext } from "@/app/_context/CartContext";
+import CartProductCard from "../cards/CartProductCard";
 
 const Cart = () => {
+    const { products } = useContext(CartContext);
+
     return (
-        <Sheet>
-            <SheetTrigger asChild>
-                <Button size="icon" variant="outline" className="mx-2 px-2"><ShoppingCart size={18} /></Button>
-            </SheetTrigger>
+        <div className="relative">
+            <Sheet>
+                <SheetTrigger asChild>
+                    <Button size="icon" variant="outline" className="mx-2 px-2"><ShoppingCart size={18} /></Button>
+                </SheetTrigger>
 
-            <SheetContent>
-                <SheetHeader>
-                    <SheetTitle>Edit profile</SheetTitle>
-                    <SheetDescription>
-                        Make changes to your profile here. Click save when you're done.
-                    </SheetDescription>
-                </SheetHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                            Name
-                        </Label>
-                        <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
-                            Username
-                        </Label>
-                        <Input id="username" value="@peduarte" className="col-span-3" />
-                    </div>
-                </div>
-                <SheetFooter>
-                    <SheetClose asChild>
-                        <Button type="submit">Save changes</Button>
-                    </SheetClose>
-                </SheetFooter>
-            </SheetContent>
+                <SheetContent>
+                    <SheetHeader>
+                        <SheetTitle>Cart</SheetTitle>
+                    </SheetHeader>
+                    {products.map((product: any) => (
+                        <CartProductCard />
+                    ))}
+                    <SheetFooter>
+                        <SheetClose asChild>
+                            <Button>Checkout</Button>
+                        </SheetClose>
+                    </SheetFooter>
+                </SheetContent>
 
-        </Sheet>
+            </Sheet>
+
+            {
+                products.length > 0 ? <span className="text-[12px] absolute top-0 right-3 font-semibold">{products.length}</span> : null
+            }
+        </div>
     )
 }
 

@@ -76,3 +76,19 @@ export async function getProduct(id: string) {
 
   return product;
 }
+
+export async function getAllProducts() {
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      price: true,
+      quantity: true,
+      sizes: true,
+      colors: true,
+    },
+  });
+
+  return products;
+}

@@ -4,6 +4,7 @@ import './globals.css'
 import ClientSessionProvider from '@/provider/ClientSessionProvider'
 import { Toaster } from '@/components/ui/toaster'
 import RtkQueryProvider from '@/provider/RtkQueryProvider'
+import CartContextProvider from '@/provider/CartContextProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <ClientSessionProvider>
           <RtkQueryProvider>
-            {children}
-            <Toaster />
+            <CartContextProvider>
+              {children}
+              <Toaster />
+            </CartContextProvider>
           </RtkQueryProvider>
         </ClientSessionProvider>
       </body>
