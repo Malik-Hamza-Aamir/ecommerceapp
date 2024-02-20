@@ -93,19 +93,9 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       const { key } = file;
-      // const storePic = await db.storeImage.create({
-      //   data: {
-      //     uploadStatus: "SUCCESS",
-      //     url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${key}`,
-      //     key: key,
-      //   },
-      //   select: {
-      //     id: true,
-      //     url: true,
-      //   },
-      // });
+      const url = `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${key}`;
 
-      return { id: metadata.userId, url: "" };
+      return { key, url };
     }),
 } satisfies FileRouter;
 

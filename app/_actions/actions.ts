@@ -184,3 +184,68 @@ export async function updateProductAction(
     return { error: "Error Updating Products" };
   }
 }
+
+export async function checkImageLinkWithStoreAction(storeId: string) {
+  try {
+    let isLinked: boolean = false;
+    const storeImage = await db.storeImage.findUnique({
+      where: {
+        storeId,
+      },
+    });
+
+    if (storeImage) {
+      isLinked = true;
+    }
+
+    return { storeImage: storeImage, isLinked: isLinked };
+  } catch (error) {
+    return { error: "Error checking Store Image Id" };
+  }
+}
+
+export async function updateStoreImageAction(
+  storeImageId: string,
+  storeId: string,
+  key: string,
+  url: string
+) {
+  try {
+    await db.storeImage.update({
+      where: {
+        id: storeImageId,
+      },
+      data: {
+        key,
+        url,
+      },
+    });
+
+    revalidatePath(`/dashboard/stores/${storeId}`);
+    return { message: "Image Updated Successfully" };
+  } catch (error) {
+    return { error: "Error Updating Store Image Id" };
+  }
+}
+
+export async function createStoreImageAction(
+  storeId: string,
+  key: string,
+  url: string
+) {
+  try {
+    await db.storeImage.create({
+      data: {
+        key,
+        url,
+        storeId,
+        uploadStatus: "SUCCESS",
+      },
+    });
+
+    revalidatePath(`/dashboard/stores/${storeId}`);
+    return { message: "Store Image Added" };
+  } catch (error) {
+    return { error: "Error Creating Store Image" };
+  }
+}

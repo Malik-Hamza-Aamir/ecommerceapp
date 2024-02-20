@@ -92,3 +92,13 @@ export async function getAllProducts() {
 
   return products;
 }
+
+export async function getStoreImage(id: string) {
+  const storeImage = await db.storeImage.findUnique({
+    where: {
+      storeId: id,
+    },
+  });
+
+  return storeImage;
+}

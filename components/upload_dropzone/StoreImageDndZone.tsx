@@ -5,23 +5,73 @@ import Dropzone from 'react-dropzone';
 import { Progress } from "@/components/ui/progress";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "../ui/use-toast";
+import {
+    updateStoreImageAction,
+    checkImageLinkWithStoreAction,
+    createStoreImageAction
+} from '@/app/_actions/actions';
+import Image from 'next/image';
 
 interface Props {
     id: string;
+    url: string | undefined;
 }
 
-const StoreImageDndZone = ({ id }: Props) => {
+const StoreImageDndZone = ({ id, url }: Props) => {
     const [isUploading, setIsUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
-    const [imgSrc, setImgSrc] = useState<string>("");
+    const [imgSrc, setImgSrc] = useState<string>(url !== undefined ? url : "");
+    const placeHolderImage = "https://picsum.photos/300/300/?blur";
     const { toast } = useToast();
+
     const { startUpload } = useUploadThing("storePicture", {
         async onClientUploadComplete(res) {
-            let storeImageId = res[0].serverData.id as string;
-            setImgSrc(res[0].serverData.url);
+            const key = res[0].serverData.key as string;
+            const url = res[0].serverData.url as string;
+            const storeId = id as string;
+            let storeImageId: string = "";
+
+            const storeImage = await checkImageLinkWithStoreAction(storeId);
+
+            if (storeImage.isLinked === true) {
+                storeImageId = storeImage.storeImage?.id as string;
+                const isUpdated = await updateStoreImageAction(storeImageId, storeId, key, url);
+
+                if (isUpdated.message) {
+                    setImgSrc(url);
+                    return toast({
+                        title: isUpdated.message,
+                        description: "Store Image has been successfully updated"
+                    })
+                }
+
+                if (isUpdated.error) {
+                    return toast({
+                        variant: "destructive",
+                        title: isUpdated.error,
+                        description: "Some issue occured during storeImage Updation"
+                    })
+                }
 
 
-            // const storeImage = await updateStoreIdImage(storeImageId, id);
+            } else if (storeImage.isLinked === false) {
+                const isStoreImageCreated = await createStoreImageAction(storeId, key, url);
+                if (isStoreImageCreated.message) {
+                    setImgSrc(url);
+                    return toast({
+                        title: isStoreImageCreated.message,
+                        description: "Store Image has been successfully added"
+                    })
+                }
+
+                if (isStoreImageCreated.error) {
+                    return toast({
+                        variant: "destructive",
+                        title: isStoreImageCreated.error,
+                        description: "Some issue occured during storeImage creation"
+                    })
+                }
+            }
         },
     });
 
@@ -64,27 +114,34 @@ const StoreImageDndZone = ({ id }: Props) => {
             }
             clearInterval(progressInterval);
             setUploadProgress(100);
-
-            // return toast({
-            //     title: "Store Image Updated",
-            //     description: "See the New Image Next Time you Login"
-            // })
         }}>
             {({ getRootProps, getInputProps, acceptedFiles }) => (
                 <section className="flex h-[15rem] mt-4 gap-2">
-                    <div className="w-[30%] h-[100%] rounded-md bg-no-repeat bg-cover bg-[url('https://picsum.photos/300/300/?blur')]" />
+                    <Image
+                        src={imgSrc !== "" ? imgSrc : placeHolderImage}
+                        alt='store image'
+                        width={1280}
+                        height={1024}
+                        className='w-[30%] h-[100%] rounded-md'
+                    />
 
-                    <div {...getRootProps()} className="border rounded-md cursor-pointer w-[70%] flex flex-col justify-center items-center">
+                    <div {...getRootProps()} className="border rounded-md cursor-pointer w-[70%] flex flex-col justify-center items-center px-5">
                         <UploadCloud size="50px" className='text-zinc-600' />
-                        <h2 className='text-zinc-400'>Drag 'n' drop Image to Upload</h2>
-                        <p className='text-zinc-400'>No need to click on update store button</p>
-                        <p className='text-zinc-400'>When image is droped here it will be uploaded directly</p>
                         <input {...getInputProps()} />
 
                         {
                             isUploading ? (
-                                <Progress value={uploadProgress} className="h-[6px] my-2" />
-                            ) : null
+                                <>
+                                    <h2 className='text-zinc-500'>Wait while the image is uploading...</h2>
+                                    <Progress value={uploadProgress} className="h-[6px] my-2" />
+                                </>
+                            ) : (
+                                <>
+                                    <h2 className='text-zinc-400'>Drag 'n' drop Image to Upload</h2>
+                                    <p className='text-zinc-400'>No need to click on update store button</p>
+                                    <p className='text-zinc-400'>When image is droped here it will be uploaded directly</p>
+                                </>
+                            )
                         }
 
                         {
