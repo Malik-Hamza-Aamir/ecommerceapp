@@ -92,32 +92,56 @@ model Address {
 }
 
 model Store {
-  id          String    @id @default(cuid())
-  name        String    @unique
+  id          String      @id @default(cuid())
+  name        String      @unique
   description String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  User        User?     @relation(fields: [userId], references: [id])
+  image       StoreImage?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+  User        User?       @relation(fields: [userId], references: [id])
   userId      String
   products    Product[]
 }
 
+model StoreImage {
+  id           String       @id @default(cuid())
+  uploadStatus UploadStatus @default(PENDING)
+  url          String
+  key          String
+  store        Store?       @relation(fields: [storeId], references: [id])
+  storeId      String?      @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
 model Product {
-  id           String    @id @default(cuid())
-  name         String    @unique
+  id           String         @id @default(cuid())
+  name         String         @unique
   description  String
   price        Float
   quantity     Int
   sizes        String[]
   colors       String[]
-  Store        Store?    @relation(fields: [storeId], references: [id])
+  images       ProductImage[]
+  Store        Store?         @relation(fields: [storeId], references: [id])
   storeId      String
-  Category     Category? @relation(fields: [categoryId], references: [id])
+  Category     Category?      @relation(fields: [categoryId], references: [id])
   categoryId   String
-  Order        Order?    @relation(fields: [orderOrderId], references: [orderId])
+  Order        Order?         @relation(fields: [orderOrderId], references: [orderId])
   orderOrderId String?
-  Cart         Cart?     @relation(fields: [cartId], references: [id])
+  Cart         Cart?          @relation(fields: [cartId], references: [id])
   cartId       Int?
+}
+
+model ProductImage {
+  id           String       @id @default(cuid())
+  uploadStatus UploadStatus @default(PENDING)
+  url          String
+  key          String
+  product      Product      @relation(fields: [productId], references: [id])
+  productId    String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model Category {

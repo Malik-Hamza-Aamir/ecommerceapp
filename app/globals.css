@@ -74,7 +74,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-.bgImage {
-  background-image: url("https://picsum.photos/200/300/?blur");
-}

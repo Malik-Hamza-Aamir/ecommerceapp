@@ -1,4 +1,5 @@
 import UpdateStoreForm from "@/components/forms/UpdateStoreForm";
+import StoreImageDndZone from "@/components/upload_dropzone/StoreImageDndZone";
 
 const StoreDetails = ({ params: { id } }: { params: { id: string } }) => {
 
@@ -14,7 +15,7 @@ const StoreDetails = ({ params: { id } }: { params: { id: string } }) => {
           <strong>Update Store</strong>
         </h2>
         <p className="text-gray-500">Update information of this store</p>
-
+        <StoreImageDndZone id={id} />
         <UpdateStoreForm id={id} />
       </div>
     </div>

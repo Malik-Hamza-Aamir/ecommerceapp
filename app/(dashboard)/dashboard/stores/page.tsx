@@ -5,8 +5,10 @@ import Link from "next/link"
 import StoreCard from "@/components/cards/StoreCard"
 import NoStores from "@/components/no_items/NoStores"
 import { getStores } from "@/app/_dataAccess"
+import { unstable_noStore } from "next/cache"
 
 const page = async () => {
+  unstable_noStore();
   const session = await getServerSession(options)
   const userId = session?.user?.id as string;
   const stores = await getStores(userId);

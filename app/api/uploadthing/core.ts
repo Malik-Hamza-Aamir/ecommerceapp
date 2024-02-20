@@ -81,6 +81,32 @@ export const ourFileRouter = {
 
       return response;
     }),
+
+  storePicture: f(["image"])
+    .middleware(async ({ req }) => {
+      const session = await getServerSession(options);
+      if (!session || !session?.user) {
+        throw new Error("Unauthorized");
+      }
+
+      return { userId: session?.user?.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const { key } = file;
+      // const storePic = await db.storeImage.create({
+      //   data: {
+      //     uploadStatus: "SUCCESS",
+      //     url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${key}`,
+      //     key: key,
+      //   },
+      //   select: {
+      //     id: true,
+      //     url: true,
+      //   },
+      // });
+
+      return { id: metadata.userId, url: "" };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
