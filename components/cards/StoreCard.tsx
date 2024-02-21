@@ -10,16 +10,25 @@ import { Button } from "../ui/button"
 import Image from "next/image"
 import { Pencil, ShoppingBasket } from 'lucide-react';
 import TooltipWrapper from "../commons/TooltipWrapper";
+import { getStoreImage } from "@/app/_dataAccess";
 
-const StoreCard = ({ storeInfo }: { storeInfo: any }) => {
+const StoreCard = async ({ storeInfo }: { storeInfo: any }) => {
+    const storeId = storeInfo.id as string;
+    const storeImage = await getStoreImage(storeId);
+    let imgSrc = "";
+    let placeHolderImg = "/dummyImage.jpg";
+    if (storeImage !== null) {
+        imgSrc = storeImage.url;
+    }
+
     return (
         <Card className="w-[32%] mb-[1.5rem]">
             <CardHeader className="h-[220px] border-b">
                 <Image
-                    src="/dummyImage.jpg"
+                    src={imgSrc !== "" ? imgSrc : placeHolderImg}
                     alt="Store Image"
-                    height={220}
-                    width={75}
+                    height={400}
+                    width={400}
                     className="w-[100%] h-[100%] rounded-t-lg"
                 />
             </CardHeader>
