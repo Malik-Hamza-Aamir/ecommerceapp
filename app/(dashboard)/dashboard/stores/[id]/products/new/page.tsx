@@ -1,4 +1,5 @@
 import { getCategories } from "@/app/_dataAccess";
+import { AddProductCarousel } from "@/components/commons/AddProductCarousel";
 import AddProductForm from "@/components/forms/AddProductForm";
 
 const page = async ({ params: { id } }: { params: { id: string } }) => {
@@ -16,6 +17,7 @@ const page = async ({ params: { id } }: { params: { id: string } }) => {
                     <strong>Add Product</strong>
                 </h2>
                 <p className="text-gray-500">Add Products to this Store</p>
+                <AddProductCarousel />
                 <AddProductForm categories={categories} id={id} />
             </div>
         </div>
