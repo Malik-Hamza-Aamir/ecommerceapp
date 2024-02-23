@@ -102,3 +102,13 @@ export async function getStoreImage(id: string) {
 
   return storeImage;
 }
+
+export async function getAllProductImages(productId: string) {
+  const productImages = await db.productImage.findMany({
+    where: {
+      productId,
+    },
+  });
+
+  return productImages;
+}

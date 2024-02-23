@@ -77,6 +77,11 @@ enum AddressType {
   SECONDARY
 }
 
+enum ImageType {
+  PRIMARY
+  SECONDARY
+}
+
 model Address {
   id            String      @id @default(cuid())
   street        String
@@ -136,6 +141,7 @@ model Product {
 model ProductImage {
   id           String       @id @default(cuid())
   uploadStatus UploadStatus @default(PENDING)
+  imageType    ImageType
   url          String
   key          String
   product      Product      @relation(fields: [productId], references: [id])

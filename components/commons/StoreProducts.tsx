@@ -83,6 +83,10 @@ export const columns: ColumnDef<Product>[] = [
         router.push(`${pathname}/edit/${row.original.id}`);
       }
 
+      const handleImages = () => {
+        router.push(`${pathname}/${row.original.id}/images`);
+      }
+
       const handleDelete = async () => {
         const result = await fetch(`http://localhost:3000/api/products`,
           {
@@ -112,6 +116,7 @@ export const columns: ColumnDef<Product>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={handleEdit}>Edit Product</DropdownMenuItem>
             <DropdownMenuItem onClick={handleDelete}>Delete Product</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleImages}>Modify Images</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
