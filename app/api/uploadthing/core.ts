@@ -97,6 +97,23 @@ export const ourFileRouter = {
 
       return { key, url };
     }),
+
+  productImages: f({ image: { maxFileCount: 5 } })
+    .middleware(async ({ req }) => {
+      const session = await getServerSession(options);
+
+      if (!session || !session?.user) {
+        throw new Error("Unauthorized");
+      }
+
+      return { userId: session?.user?.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const { key } = file;
+      const url = `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${key}`;
+
+      return { key, url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -1,16 +1,16 @@
 import { getAllProductImages } from "@/app/_dataAccess"
+import ProductImageCard from "@/components/cards/ProductImageCard";
+import NoProductImages from "@/components/no_items/NoProductImages";
 
 const page = async ({ params: { prodid } }: { params: { prodid: string } }) => {
     const productImages = await getAllProductImages(prodid);
 
     return (
-        <div className="pt-[32px] mr-[10%] flex-1 border-2">
+        <div className="pt-[32px] mr-[10%] flex-1">
             {
                 productImages.length === 0 ? (
-                    <></>
-                ) : (
-                    <></>
-                )
+                    <NoProductImages prodId={prodid} />
+                ) : (<ProductImageCard productImages={productImages} />)
             }
         </div>
 
