@@ -3,9 +3,10 @@ import UploadBtn from '../buttons/UploadBtn';
 
 interface Props {
     prodId: string;
+    id: string;
 }
 
-const NoProductImages = ({ prodId }: Props) => {
+const NoProductImages = ({ prodId, id }: Props) => {
     return (
         <div className="border px-5 py-3 rounded-lg bg-[#fafafa] flex justify-between items-center">
             <div className="flex gap-4">
@@ -15,7 +16,7 @@ const NoProductImages = ({ prodId }: Props) => {
                     <p className="text-sm">Add products images. Only 5 images are allowed at max.</p>
                 </div>
             </div>
-            <UploadBtn prodId={prodId} />
+            <UploadBtn prodId={prodId} id={id} />
         </div>
     )
 }

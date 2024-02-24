@@ -4,12 +4,14 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useToast } from "../ui/use-toast";
+import { addProductImagesAction } from "@/app/_actions/actions";
 
 interface Props {
     prodId: string;
+    id: string;
 }
 
-export default function UploadBtn({ prodId }: Props) {
+export default function UploadBtn({ prodId, id }: Props) {
     const [isUploading, setIsUploading] = useState<boolean>(false);
     const { toast } = useToast();
 
@@ -27,10 +29,33 @@ export default function UploadBtn({ prodId }: Props) {
                         onUploadProgress={() => {
                             setIsUploading(true);
                         }}
-                        onClientUploadComplete={async res => {
-                            // Do something with the response
+                        onClientUploadComplete={async (res) => {
+                            const data = res.map((d) => {
+                                return {
+                                    url: d.serverData.url,
+                                    key: d.serverData.key,
+                                    productId: prodId,
+                                    uploadStatus: "SUCCESS",
+                                    imageType: "SECONDARY"
+                                }
+                            })
+
+                            const addImage = await addProductImagesAction(data, prodId, id);
+
+                            if (addImage?.message) {
+                                toast({
+                                    title: addImage.message,
+                                    description: "Product Images has been added successfully"
+                                })
+                            } else if (addImage?.error) {
+                                toast({
+                                    variant: "destructive",
+                                    title: addImage.error,
+                                    description: "Something went wrong during adding product images"
+                                })
+                            }
+
                             setIsUploading(false);
-                            console.log("Files: ", res);
                         }}
                         onUploadError={() => {
                             return toast({

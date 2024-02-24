@@ -249,3 +249,49 @@ export async function createStoreImageAction(
     return { error: "Error Creating Store Image" };
   }
 }
+
+export async function addProductImagesAction(
+  data: any,
+  prodId: string,
+  storeId: string
+) {
+  try {
+    const prodImgCount = await db.productImage.count({
+      where: {
+        productId: prodId,
+      },
+    });
+
+    if (prodImgCount === 0) {
+      data[0].imageType = "PRIMARY";
+    }
+
+    await db.productImage.createMany({
+      data: data,
+    });
+
+    revalidatePath(`/dashboard/stores/${storeId}/products/${prodId}/images`);
+    return { message: "Product Image Added" };
+  } catch (error) {
+    return { error: "Error Adding Product Images" };
+  }
+}
+
+export async function deleteProductImageAction(
+  id: string,
+  storeId: string,
+  prodId: string
+) {
+  try {
+    await db.productImage.delete({
+      where: {
+        id,
+      },
+    });
+
+    revalidatePath(`/dashboard/stores/${storeId}/products/${prodId}/images`);
+    return { message: "Product Image Deleted" };
+  } catch (error) {
+    return { error: "Error Deleting Product Images" };
+  }
+}
