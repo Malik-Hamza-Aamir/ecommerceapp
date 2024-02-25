@@ -28,8 +28,8 @@ const Cart = () => {
                     <SheetHeader>
                         <SheetTitle>Cart</SheetTitle>
                     </SheetHeader>
-                    {products.map((product: any) => (
-                        <CartProductCard />
+                    {products.map((product: any, index: number) => (
+                        <CartProductCard key={index} />
                     ))}
                     <SheetFooter>
                         <SheetClose asChild>

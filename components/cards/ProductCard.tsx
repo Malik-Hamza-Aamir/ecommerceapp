@@ -7,6 +7,18 @@ import { useEffect, useState, useContext } from "react";
 const ProductCard = ({ data, productId }: { data: any, productId: string }) => {
     const { setProducts } = useContext(CartContext);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
+
+    const checkProductExists = (prev: any, prodId: any) => {
+        let exists = false;
+        prev.map((data: any) => {
+            if (data.id === prodId) {
+                exists = true;
+            }
+        })
+
+        return exists;
+    }
+
     const handleClick = () => {
         const { id, name, description, price } = data;
         const product = {
@@ -15,8 +27,28 @@ const ProductCard = ({ data, productId }: { data: any, productId: string }) => {
             description: description,
             price: price,
             image: imgSrc,
+            noOfItems: 1,
         }
-        setProducts((prev: any) => [...prev, product])
+
+        setProducts((prev: any) => {
+            const exists = checkProductExists(prev, product.id);
+
+            if (exists) {
+                const updatedProducts = prev.map((item: any) => {
+                    if (item.id === product.id) {
+                        return {
+                            ...item,
+                            noOfItems: item.noOfItems + 1
+                        };
+                    }
+                    return item;
+                });
+                return updatedProducts;
+
+            } else {
+                return [...prev, product];
+            }
+        })
     }
 
     const getProductImages = async () => {

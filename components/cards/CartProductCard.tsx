@@ -1,9 +1,10 @@
 "use client";
-import { useContext } from "react";
-import { CartContext } from "@/app/_context/CartContext";
+
+interface Props {
+    products: any;
+}
 
 const CartProductCard = () => {
-    const { products, setProducts } = useContext(CartContext);
     return (
         <div>CartProductCard</div>
     )
