@@ -7,19 +7,16 @@ const page = async ({ params: { id, prodid } }: { params: { id: string, prodid: 
 
     return (
         <div className="pt-[32px] mr-[10%] flex-1">
-            {
-                productImages.length === 0 ? (
-                    <NoProductImages prodId={prodid} id={id} />
-                ) : (
-                    <div className="flex justify-between flex-wrap">
-                        {
-                            productImages.map((prodImage) => (
-                                <ProductImageCard key={prodImage.id} id={prodImage.id} imgSrc={prodImage.url} imageType={prodImage.imageType} prodId={prodid} storeId={id} />
-                            ))
-                        }
-                    </div>
-                )
-            }
+            <NoProductImages prodId={prodid} id={id} />
+
+            <div className="flex justify-between flex-wrap mt-2">
+                {
+                    productImages.map((prodImage) => (
+                        <ProductImageCard key={prodImage.id} id={prodImage.id} imgSrc={prodImage.url} imageType={prodImage.imageType} prodId={prodid} storeId={id} />
+                    ))
+                }
+            </div>
+
         </div>
     )
 }

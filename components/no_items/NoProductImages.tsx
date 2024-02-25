@@ -12,7 +12,7 @@ const NoProductImages = ({ prodId, id }: Props) => {
             <div className="flex gap-4">
                 <Image className="font-normal" />
                 <div>
-                    <strong className="text-md font-semibold">No Images Added Yet</strong>
+                    <strong className="text-md font-semibold">Add Images</strong>
                     <p className="text-sm">Add products images. Only 5 images are allowed at max.</p>
                 </div>
             </div>

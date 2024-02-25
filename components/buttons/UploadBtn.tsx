@@ -65,14 +65,14 @@ export default function UploadBtn({ prodId, id }: Props) {
                             })
                         }}
                         appearance={{
-                            button: "",
+                            button: "bg-black h-[70%]",
                             container: "",
                             allowedContent: "hidden"
                         }}
                         content={{
                             button({ ready }) {
                                 if (ready) {
-                                    return <div>Choose Files</div>;
+                                    return "Choose Files";
                                 }
                             },
 
