@@ -1,18 +1,50 @@
 "use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { useContext } from "react";
 import { CartContext } from "@/app/_context/CartContext";
+import { useEffect, useState, useContext } from "react";
 
-const ProductCard = ({ data }: { data: any }) => {
+const ProductCard = ({ data, productId }: { data: any, productId: string }) => {
     const { setProducts } = useContext(CartContext);
+    const [imgSrc, setImgSrc] = useState<string | null>(null);
     const handleClick = () => {
         setProducts((prev: any) => [...prev, data])
     }
 
+    const getProductImages = async () => {
+        const result = await fetch("http://localhost:3000/api/productimages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                productId: productId
+            }),
+        })
+
+        if (result.ok) {
+            const images = await result.json();
+            if (images.productImages !== null) {
+                setImgSrc(images.productImages.url);
+            } else if (images.productImages === null) {
+                setImgSrc(images.productImages);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getProductImages();
+    }, [])
+
     return (
-        <div className="border-2 w-[30%]">
-            <Image src="/dummyImage.jpg" alt="product image" width={45} height={45} />
+        <div className="w-[30%]">
+
+            <Image
+                src={imgSrc !== "" && imgSrc !== null ? imgSrc : "/dummyImage.jpg"}
+                alt="product image"
+                height={100}
+                width={100}
+            />
             <h4>{data.name}</h4>
             <h4>$ {data.price}</h4>
             <Button size="sm" onClick={handleClick}>Add to cart</Button>

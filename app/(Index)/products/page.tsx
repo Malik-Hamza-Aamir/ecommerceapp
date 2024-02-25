@@ -6,10 +6,10 @@ const page = async () => {
 
     return (
         <>
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap justify-evenly">
                 {
                     products.map((product: any) => (
-                        <ProductCard key={product.id} data={product} />
+                        <ProductCard key={product.id} data={product} productId={product.id} />
                     ))
                 }
             </div>
