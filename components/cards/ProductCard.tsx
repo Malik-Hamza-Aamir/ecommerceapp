@@ -8,7 +8,15 @@ const ProductCard = ({ data, productId }: { data: any, productId: string }) => {
     const { setProducts } = useContext(CartContext);
     const [imgSrc, setImgSrc] = useState<string | null>(null);
     const handleClick = () => {
-        setProducts((prev: any) => [...prev, data])
+        const { id, name, description, price } = data;
+        const product = {
+            id: id,
+            name: name,
+            description: description,
+            price: price,
+            image: imgSrc,
+        }
+        setProducts((prev: any) => [...prev, product])
     }
 
     const getProductImages = async () => {
