@@ -1,20 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import StoreProducts from "@/components/commons/StoreProducts";
+import { getStoreProducts } from "@/app/_dataAccess";
 
 const page = async ({ params: { id } }: { params: { id: string } }) => {
-  const result = await fetch(`http://localhost:3000/api/getstoreproducts?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: 'no-store'
-    },
-  );
+  const products = await getStoreProducts(id);
 
-  const data = await result.json();
-  const products = data.stores.products;
 
   return (
     <div className="pt-[32px] pr-[10%] flex-1 flex flex-col max-h-[90vh] overflow-y-auto">

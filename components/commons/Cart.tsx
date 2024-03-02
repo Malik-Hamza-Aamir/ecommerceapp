@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart } from 'lucide-react';
 import { Button } from "../ui/button";
-import { useContext } from "react";
-import { CartContext } from "@/app/_context/CartContext";
 import CartProductCard from "../cards/CartProductCard";
+import { useProductsContext } from "@/hooks/useProductsContext";
+import { ProductsContext } from "@/common/type";
 
 const Cart = () => {
-    const { products } = useContext(CartContext);
+    const { products } = useProductsContext();
 
     return (
         <div className="relative">
@@ -28,8 +28,8 @@ const Cart = () => {
                     <SheetHeader>
                         <SheetTitle>Cart</SheetTitle>
                     </SheetHeader>
-                    {products.map((product: any, index: number) => (
-                        <CartProductCard key={index} />
+                    {products.map((product: ProductsContext) => (
+                        <CartProductCard key={product.id} product={product} />
                     ))}
                     <SheetFooter>
                         <SheetClose asChild>

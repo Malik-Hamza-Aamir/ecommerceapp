@@ -1,10 +1,10 @@
 import { getCategories, getProduct } from "@/app/_dataAccess";
-import { Product } from "@/common/type";
+import { EditProduct } from "@/common/type";
 import UpdateProductForm from "@/components/forms/UpdateProductForm";
 
 const page = async ({ params: { id, prodid } }: { params: { id: string, prodid: string } }) => {
     const categories = await getCategories();
-    const product = await getProduct(prodid) as Product;
+    const product = await getProduct(prodid) as EditProduct;
 
     return (
         <div className="pt-[32px] mr-[10%] flex-1">

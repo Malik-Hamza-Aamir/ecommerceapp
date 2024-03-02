@@ -1,14 +1,16 @@
 "use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { CartContext } from "@/app/_context/CartContext";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
+import { useProductsContext } from "@/hooks/useProductsContext";
+import { Products } from "@/common/type";
 
-const ProductCard = ({ data, productId }: { data: any, productId: string }) => {
-    const { setProducts } = useContext(CartContext);
+
+const ProductCard = ({ data, productId }: { data: Products, productId: string }) => {
+    const { setProducts } = useProductsContext();
     const [imgSrc, setImgSrc] = useState<string | null>(null);
 
-    const checkProductExists = (prev: any, prodId: any) => {
+    const checkProductExists = (prev: Products[], prodId: string) => {
         let exists = false;
         prev.map((data: any) => {
             if (data.id === prodId) {

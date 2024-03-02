@@ -124,8 +124,8 @@ export const columns: ColumnDef<Product>[] = [
   },
 ]
 
-const StoreProducts = ({ prodInfo }: { prodInfo: Product[] }) => {
-  const data: any = prodInfo.map((data) => ({
+const StoreProducts = ({ prodInfo }: { prodInfo: any }) => {
+  const data: any = prodInfo.map((data: any) => ({
     id: data.id,
     name: data.name,
     description: data.description,

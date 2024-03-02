@@ -59,6 +59,16 @@ export async function getCategories() {
   return categories;
 }
 
+export async function getStoreProducts(storeId: string) {
+  const storeProducts = await db.product.findMany({
+    where: {
+      storeId,
+    },
+  });
+
+  return storeProducts;
+}
+
 export async function getProduct(id: string) {
   const product = await db.product.findUnique({
     where: {

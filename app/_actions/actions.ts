@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
-import { addressSchema } from "@/lib/types";
+import { addressSchema } from "@/common/type";
 
 export async function addAddressAction(id: string, formData: FormData) {
   try {
