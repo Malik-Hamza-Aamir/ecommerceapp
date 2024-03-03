@@ -5,6 +5,7 @@ import { ProductsContext } from "@/common/type";
 
 const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [products, setProducts] = useState<ProductsContext[]>([]);
+    console.log("products inside the context :", products);
 
     return (
         <CartContext.Provider value={{ products, setProducts }}>

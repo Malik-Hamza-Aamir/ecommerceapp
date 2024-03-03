@@ -3,16 +3,16 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { useProductsContext } from "@/hooks/useProductsContext";
-import { Products } from "@/common/type";
+import { Products, ProductsContext } from "@/common/type";
 
 
 const ProductCard = ({ data, productId }: { data: Products, productId: string }) => {
     const { setProducts } = useProductsContext();
     const [imgSrc, setImgSrc] = useState<string | null>(null);
 
-    const checkProductExists = (prev: Products[], prodId: string) => {
+    const checkProductExists = (prev: ProductsContext[], prodId: string) => {
         let exists = false;
-        prev.map((data: any) => {
+        prev.map((data: ProductsContext) => {
             if (data.id === prodId) {
                 exists = true;
             }
@@ -32,7 +32,7 @@ const ProductCard = ({ data, productId }: { data: Products, productId: string })
             noOfItems: 1,
         }
 
-        setProducts((prev: any) => {
+        setProducts((prev: ProductsContext[]) => {
             const exists = checkProductExists(prev, product.id);
 
             if (exists) {

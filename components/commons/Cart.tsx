@@ -15,7 +15,11 @@ import { useProductsContext } from "@/hooks/useProductsContext";
 import { ProductsContext } from "@/common/type";
 
 const Cart = () => {
-    const { products } = useProductsContext();
+    const { products, setProducts } = useProductsContext();
+
+    const handleClearCartClick = () => {
+        setProducts([]);
+    }
 
     return (
         <div className="relative">
@@ -29,9 +33,14 @@ const Cart = () => {
                         <SheetTitle>Cart</SheetTitle>
                     </SheetHeader>
                     {products.map((product: ProductsContext) => (
-                        <CartProductCard key={product.id} product={product} />
+                        <CartProductCard key={product.id} product={product} setProducts={setProducts} />
                     ))}
                     <SheetFooter>
+                        {
+                            products.length > 0 ? (
+                                <Button onClick={handleClearCartClick}>Clear Cart</Button>
+                            ) : null
+                        }
                         <SheetClose asChild>
                             <Button>Checkout</Button>
                         </SheetClose>
