@@ -13,13 +13,24 @@ import { Button } from "../ui/button";
 import CartProductCard from "../cards/CartProductCard";
 import { useProductsContext } from "@/hooks/useProductsContext";
 import { ProductsContext } from "@/common/type";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
     const { products, setProducts } = useProductsContext();
+    const [totalBill, setTotalBill] = useState<number | null>(null);
 
     const handleClearCartClick = () => {
         setProducts([]);
     }
+
+    useEffect(() => {
+        const bill: number = products.map((product: ProductsContext) => {
+            return product.noOfItems * product.price
+        }).reduce((prev: number, curr: number) => prev + curr, 0);
+
+        setTotalBill(bill);
+    }, [products])
+
 
     return (
         <div className="relative">
@@ -35,12 +46,17 @@ const Cart = () => {
                     {products.map((product: ProductsContext) => (
                         <CartProductCard key={product.id} product={product} setProducts={setProducts} />
                     ))}
+
+                    {products.length > 0 ? <h5>Total : <strong>{totalBill !== null ? totalBill : 0}</strong></h5> : null}
                     <SheetFooter>
                         {
                             products.length > 0 ? (
                                 <Button onClick={handleClearCartClick}>Clear Cart</Button>
                             ) : null
                         }
+
+                        <hr />
+
                         <SheetClose asChild>
                             <Button>Checkout</Button>
                         </SheetClose>
