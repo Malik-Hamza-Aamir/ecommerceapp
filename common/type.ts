@@ -57,3 +57,8 @@ export interface ProductContextType {
   products: ProductsContext[];
   setProducts: React.Dispatch<React.SetStateAction<ProductsContext[]>>;
 }
+
+export interface ProductOrder {
+  productId: string;
+  quantity: number;
+}

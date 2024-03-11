@@ -12,25 +12,51 @@ import { ShoppingCart } from 'lucide-react';
 import { Button } from "../ui/button";
 import CartProductCard from "../cards/CartProductCard";
 import { useProductsContext } from "@/hooks/useProductsContext";
-import { ProductsContext } from "@/common/type";
-import { useEffect, useState } from "react";
+import { useTotalBill } from "@/hooks/useTotalBill";
+import { ProductsContext, ProductOrder } from "@/common/type";
+import { generateOrderAction } from "@/app/_actions/actions";
+import { useToast } from "../ui/use-toast";
 
-const Cart = () => {
+interface Props {
+    userId: string;
+}
+
+const Cart = ({ userId }: Props) => {
     const { products, setProducts } = useProductsContext();
-    const [totalBill, setTotalBill] = useState<number | null>(null);
+    const totalBill = useTotalBill();
+    const { toast } = useToast();
 
     const handleClearCartClick = () => {
         setProducts([]);
     }
 
-    useEffect(() => {
-        const bill: number = products.map((product: ProductsContext) => {
-            return product.noOfItems * product.price
-        }).reduce((prev: number, curr: number) => prev + curr, 0);
+    const handleCheckoutClick = async () => {
+        const productForOrder: ProductOrder[] = products.map((products: ProductsContext) => {
+            return {
+                productId: products.id,
+                quantity: products.noOfItems
+            }
+        })
 
-        setTotalBill(bill);
-    }, [products])
+        if (totalBill) {
+            const orderGenerated = await generateOrderAction(userId, totalBill, productForOrder);
 
+            if (orderGenerated?.message) {
+                toast({
+                    title: orderGenerated.message,
+                    description: "Your order has been generated"
+                })
+
+                setProducts([]);
+            } else if (orderGenerated?.error) {
+                toast({
+                    variant: "destructive",
+                    title: orderGenerated.error,
+                    description: "Something went wrong during creating your order"
+                })
+            }
+        }
+    }
 
     return (
         <div className="relative">
@@ -58,7 +84,7 @@ const Cart = () => {
                         <hr />
 
                         <SheetClose asChild>
-                            <Button>Checkout</Button>
+                            <Button onClick={handleCheckoutClick}>Checkout</Button>
                         </SheetClose>
                     </SheetFooter>
                 </SheetContent>

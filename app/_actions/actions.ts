@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
-import { addressSchema } from "@/common/type";
+import { addressSchema, ProductOrder } from "@/common/type";
 
 export async function addAddressAction(id: string, formData: FormData) {
   try {
@@ -293,5 +293,44 @@ export async function deleteProductImageAction(
     return { message: "Product Image Deleted" };
   } catch (error) {
     return { error: "Error Deleting Product Images" };
+  }
+}
+
+export async function generateOrderAction(
+  userId: string,
+  totalPrice: number,
+  products: ProductOrder[]
+) {
+  try {
+    const createdOrder = await db.order.create({
+      select: {
+        orderId: true,
+      },
+      data: {
+        userId,
+        orderStatus: "PROCESSING",
+        totalPrice,
+      },
+    });
+
+    if (createdOrder) {
+      const productOrderData = products.map((products: ProductOrder) => {
+        return {
+          orderId: createdOrder.orderId,
+          productId: products.productId,
+          quantity: products.quantity,
+        };
+      });
+
+      const order = await db.productOrder.createMany({
+        data: productOrderData,
+      });
+
+      if (order) {
+        return { message: "Order Created" };
+      }
+    }
+  } catch (error) {
+    return { error: "Generate Order Action Failed" };
   }
 }

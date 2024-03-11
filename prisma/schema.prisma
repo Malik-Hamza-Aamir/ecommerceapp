@@ -62,14 +62,14 @@ enum OrderStatus {
 }
 
 model Order {
-  orderId     String      @id @default(cuid())
-  products    Product[]
+  orderId     String         @id @default(cuid())
+  products    ProductOrder[]
   userId      String
-  orderStatus OrderStatus @default(PENDING)
+  orderStatus OrderStatus    @default(PENDING)
   totalPrice  Float
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  User        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  User        User           @relation(fields: [userId], references: [id])
 }
 
 enum AddressType {
@@ -120,22 +120,30 @@ model StoreImage {
 }
 
 model Product {
-  id           String         @id @default(cuid())
-  name         String         @unique
-  description  String
-  price        Float
-  quantity     Int
-  sizes        String[]
-  colors       String[]
-  images       ProductImage[]
-  Store        Store?         @relation(fields: [storeId], references: [id])
-  storeId      String
-  Category     Category?      @relation(fields: [categoryId], references: [id])
-  categoryId   String
-  Order        Order?         @relation(fields: [orderOrderId], references: [orderId])
-  orderOrderId String?
-  Cart         Cart?          @relation(fields: [cartId], references: [id])
-  cartId       Int?
+  id          String         @id @default(cuid())
+  name        String         @unique
+  description String
+  price       Float
+  quantity    Int
+  sizes       String[]
+  colors      String[]
+  images      ProductImage[]
+  Store       Store?         @relation(fields: [storeId], references: [id])
+  storeId     String
+  Category    Category?      @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  Cart        Cart?          @relation(fields: [cartId], references: [id])
+  cartId      Int?
+  orders      ProductOrder[]
+}
+
+model ProductOrder {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [orderId])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
 }
 
 model ProductImage {
