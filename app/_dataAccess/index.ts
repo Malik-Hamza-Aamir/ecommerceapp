@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { db } from "../db";
 
 export async function getAddress(id: string) {
@@ -121,4 +122,28 @@ export async function getAllProductImages(productId: string) {
   });
 
   return productImages;
+}
+
+export async function getAllOrders(userId: string) {
+  const orders = await db.order.findMany({
+    where: {
+      userId,
+    },
+  });
+  revalidatePath("/dashboard/orders");
+  return orders;
+}
+
+export async function getAllOrderedProducts(orderId: string) {
+  const orderedProducts = await db.myOrders.findMany({
+    where: {
+      orderId,
+    },
+    include: {
+      product: true,
+    },
+  });
+
+  const productsArray = orderedProducts.map((item) => item.product);
+  return productsArray;
 }

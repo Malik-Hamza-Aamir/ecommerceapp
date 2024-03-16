@@ -322,7 +322,7 @@ export async function generateOrderAction(
         };
       });
 
-      const order = await db.productOrder.createMany({
+      const order = await db.myOrders.createMany({
         data: productOrderData,
       });
 
@@ -333,4 +333,8 @@ export async function generateOrderAction(
   } catch (error) {
     return { error: "Generate Order Action Failed" };
   }
+}
+
+export async function reloadPageAction(pageUrl: string) {
+  revalidatePath(pageUrl);
 }
