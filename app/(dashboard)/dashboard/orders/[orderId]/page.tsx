@@ -1,21 +1,9 @@
-import { getAllOrderedProducts } from "@/app/_dataAccess"
+import React from 'react'
 
-const OrderedProducts = async ({ params: { orderId } }: { params: { orderId: string } }) => {
-    const products = await getAllOrderedProducts(orderId);
-
+const page = () => {
     return (
-        <div>
-            {
-                products.map((product) => (
-                    <div key={product.id}>
-                        <p>{product.id}</p>
-                        <p>{product.name}</p>
-                        <p>{product.quantity}</p>
-                    </div>
-                ))
-            }
-        </div>
+        <div>order id page</div>
     )
 }
 
-export default OrderedProducts
+export default page

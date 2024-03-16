@@ -296,45 +296,6 @@ export async function deleteProductImageAction(
   }
 }
 
-export async function generateOrderAction(
-  userId: string,
-  totalPrice: number,
-  products: ProductOrder[]
-) {
-  try {
-    const createdOrder = await db.order.create({
-      select: {
-        orderId: true,
-      },
-      data: {
-        userId,
-        orderStatus: "PROCESSING",
-        totalPrice,
-      },
-    });
-
-    if (createdOrder) {
-      const productOrderData = products.map((products: ProductOrder) => {
-        return {
-          orderId: createdOrder.orderId,
-          productId: products.productId,
-          quantity: products.quantity,
-        };
-      });
-
-      const order = await db.myOrders.createMany({
-        data: productOrderData,
-      });
-
-      if (order) {
-        return { message: "Order Created" };
-      }
-    }
-  } catch (error) {
-    return { error: "Generate Order Action Failed" };
-  }
-}
-
 export async function reloadPageAction(pageUrl: string) {
   revalidatePath(pageUrl);
 }
