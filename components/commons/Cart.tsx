@@ -14,7 +14,6 @@ import CartProductCard from "../cards/CartProductCard";
 import { useProductsContext } from "@/hooks/useProductsContext";
 import { useTotalBill } from "@/hooks/useTotalBill";
 import { ProductsContext, ProductOrder } from "@/common/type";
-import { generateOrderAction } from "@/app/_actions/actions";
 import { useToast } from "../ui/use-toast";
 
 interface Props {
@@ -39,22 +38,23 @@ const Cart = ({ userId }: Props) => {
         })
 
         if (totalBill) {
-            const orderGenerated = await generateOrderAction(userId, totalBill, productForOrder);
+            console.log("bill :", totalBill);
+            // const orderGenerated = await generateOrderAction(userId, totalBill, productForOrder);
 
-            if (orderGenerated?.message) {
-                toast({
-                    title: orderGenerated.message,
-                    description: "Your order has been generated"
-                })
+            // if (orderGenerated?.message) {
+            //     toast({
+            //         title: orderGenerated.message,
+            //         description: "Your order has been generated"
+            //     })
 
-                setProducts([]);
-            } else if (orderGenerated?.error) {
-                toast({
-                    variant: "destructive",
-                    title: orderGenerated.error,
-                    description: "Something went wrong during creating your order"
-                })
-            }
+            //     setProducts([]);
+            // } else if (orderGenerated?.error) {
+            //     toast({
+            //         variant: "destructive",
+            //         title: orderGenerated.error,
+            //         description: "Something went wrong during creating your order"
+            //     })
+            // }
         }
     }
 

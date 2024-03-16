@@ -33,6 +33,16 @@ model User {
   updatedAt    DateTime     @updatedAt
   cart         Cart?
   userImageId  String?
+  myOrders     MyOrders[]
+}
+
+model MyOrders {
+  id        String   @id @default(cuid())
+  totalBill Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model Product {
