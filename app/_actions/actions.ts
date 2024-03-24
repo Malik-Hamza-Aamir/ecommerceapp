@@ -299,3 +299,68 @@ export async function deleteProductImageAction(
 export async function reloadPageAction(pageUrl: string) {
   revalidatePath(pageUrl);
 }
+
+export async function createNewOrderAction(
+  totalBill: number,
+  address: string,
+  userId: string
+) {
+  try {
+    const myOrder = await db.myOrders.create({
+      data: {
+        totalBill,
+        Address: address,
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return myOrder.id;
+  } catch (error) {
+    return { error: "Error creating new order" };
+  }
+}
+
+export async function getPrimaryAddressAction(userId: string) {
+  try {
+    const primaryAddress = await db.address.findMany({
+      where: {
+        userId,
+        addressType: "PRIMARY",
+      },
+    });
+
+    let address: string = "";
+
+    if (primaryAddress && primaryAddress.length === 1) {
+      address +=
+        primaryAddress[0].street +
+        " " +
+        primaryAddress[0].city +
+        " " +
+        primaryAddress[0].country +
+        " " +
+        primaryAddress[0].stateProvince +
+        " " +
+        primaryAddress[0].zip;
+    }
+    return address;
+  } catch (error) {
+    return { error: "Error getting user address" };
+  }
+}
+
+export async function addProductToOrders(productOrder: ProductOrder[]) {
+  try {
+    await db.productQuantity.createMany({
+      data: productOrder,
+    });
+
+    return { message: "Order placed successfully" };
+  } catch (error) {
+    console.log("error is : ", error);
+    return { error: "Error while adding products to orders" };
+  }
+}

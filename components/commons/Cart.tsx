@@ -15,6 +15,7 @@ import { useProductsContext } from "@/hooks/useProductsContext";
 import { useTotalBill } from "@/hooks/useTotalBill";
 import { ProductsContext, ProductOrder } from "@/common/type";
 import { useToast } from "../ui/use-toast";
+import { createNewOrderAction, getPrimaryAddressAction, addProductToOrders } from "@/app/_actions/actions";
 
 interface Props {
     userId: string;
@@ -30,31 +31,40 @@ const Cart = ({ userId }: Props) => {
     }
 
     const handleCheckoutClick = async () => {
-        const productForOrder: ProductOrder[] = products.map((products: ProductsContext) => {
-            return {
-                productId: products.id,
-                quantity: products.noOfItems
+        const primaryAddress = await getPrimaryAddressAction(userId);
+        if (primaryAddress) {
+            const address: string = primaryAddress as string;
+            if (totalBill) {
+                const newOrder = await createNewOrderAction(totalBill, address, userId);
+                if (newOrder) {
+                    let orderId: string = newOrder as string;
+
+                    const productForOrder: ProductOrder[] = products.map((products: ProductsContext) => {
+                        return {
+                            productId: products.id,
+                            quantity: products.noOfItems,
+                            myOrdersId: orderId
+                        }
+                    })
+
+                    const productToOrders = await addProductToOrders(productForOrder);
+
+                    if (productToOrders?.message) {
+                        toast({
+                            title: productToOrders.message,
+                            description: "Your order has been generated"
+                        })
+
+                        setProducts([]);
+                    } else if (productToOrders?.error) {
+                        toast({
+                            variant: "destructive",
+                            title: productToOrders.error,
+                            description: "Something went wrong during creating your order"
+                        })
+                    }
+                }
             }
-        })
-
-        if (totalBill) {
-            console.log("bill :", totalBill);
-            // const orderGenerated = await generateOrderAction(userId, totalBill, productForOrder);
-
-            // if (orderGenerated?.message) {
-            //     toast({
-            //         title: orderGenerated.message,
-            //         description: "Your order has been generated"
-            //     })
-
-            //     setProducts([]);
-            // } else if (orderGenerated?.error) {
-            //     toast({
-            //         variant: "destructive",
-            //         title: orderGenerated.error,
-            //         description: "Something went wrong during creating your order"
-            //     })
-            // }
         }
     }
 

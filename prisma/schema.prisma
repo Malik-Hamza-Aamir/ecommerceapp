@@ -50,7 +50,7 @@ model MyOrders {
 model ProductQuantity {
   id         String    @id @default(cuid())
   productId  String
-  quantity   String
+  quantity   Int
   MyOrders   MyOrders? @relation(fields: [myOrdersId], references: [id])
   myOrdersId String?
 }

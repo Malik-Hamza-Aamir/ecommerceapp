@@ -61,4 +61,5 @@ export interface ProductContextType {
 export interface ProductOrder {
   productId: string;
   quantity: number;
+  myOrdersId: string;
 }
