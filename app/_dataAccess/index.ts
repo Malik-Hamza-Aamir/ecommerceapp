@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
+import { MyOrderedProducts } from "@/common/type";
 
 export async function getAddress(id: string) {
   const address = db.user.findUnique({
@@ -122,4 +123,54 @@ export async function getAllProductImages(productId: string) {
   });
 
   return productImages;
+}
+
+export async function getAllOrders(userId: string) {
+  const orders = await db.myOrders.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true,
+      totalBill: true,
+      createdAt: true,
+      Address: true,
+    },
+  });
+
+  return orders;
+}
+
+export async function getProductQuantity(orderId: string) {
+  const productsQuantity = await db.productQuantity.findMany({
+    where: {
+      myOrdersId: orderId,
+    },
+    select: {
+      id: true,
+      productId: true,
+      quantity: true,
+    },
+  });
+
+  const productsArray: MyOrderedProducts[] = await Promise.all(
+    productsQuantity.map(async (productQuantity) => {
+      const products = await db.product.findUnique({
+        where: {
+          id: productQuantity.productId,
+        },
+      });
+
+      const payload: MyOrderedProducts = {
+        id: productQuantity.id,
+        productId: productQuantity.productId,
+        productName: products?.name as string,
+        quantity: productQuantity.quantity,
+      };
+
+      return payload;
+    })
+  );
+
+  return productsArray;
 }

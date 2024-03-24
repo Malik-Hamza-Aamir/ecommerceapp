@@ -358,6 +358,7 @@ export async function addProductToOrders(productOrder: ProductOrder[]) {
       data: productOrder,
     });
 
+    revalidatePath("/dashboard/orders");
     return { message: "Order placed successfully" };
   } catch (error) {
     console.log("error is : ", error);

@@ -63,3 +63,10 @@ export interface ProductOrder {
   quantity: number;
   myOrdersId: string;
 }
+
+export interface MyOrderedProducts {
+  id: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+}
